@@ -17,17 +17,26 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: rgb(var(--background-end-rgb));
+  background-color: var(--forground-rgb);
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+.container {
+  display: flex;
+  gap: 20px;
+}
+.menu {
+  flex:2;
+}
+.content {
+  flex: 10;
+  /* background-color: blueviolet; */
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }

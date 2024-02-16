@@ -1,0 +1,51 @@
+.container{
+    position: fixed;
+    top: 10px;
+    left: 5px;
+    height: 97%;
+    background-color: rgb(253 242 248);
+    border-radius: 20px;
+    padding-left: 15px;
+  }
+  
+  .user{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .userImage{
+    border-radius: 50%;
+    object-fit: fit;
+  }
+  
+  .list{
+    list-style: none;
+  }
+  
+  .cat{
+    color: var(--textSoft);
+    font-weight: bold;
+    font-size: 13px;
+    margin: 10px 0px;
+  }
+  
+  .logout{
+    padding: 20px;
+    margin: 5px 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    background: none;
+    border: none;
+    color: white;
+    width: 100%;
+  }
+  
+  .logout:hover{
+    background-color: #2e374a;
+  }
