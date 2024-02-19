@@ -1,21 +1,23 @@
-import Image from "next/image";
-import React from "react";
 import Sidebar from "@/Components/sidebar/sidebarrr"
 import Navbar from "@/Components/NavBar";
 
-export default function Home() {
-  return (
-    <div className="container">
+
+export default function Layout({
+    children,
+  }: Readonly<{
+    children: React.ReactNode;
+  }>) {
+    return (
+        <div className="container">
         <div className="menu">
             <Sidebar />    
         </div>    
         <div className="content">
             <Navbar />
             <main className="bg-pink-500">
-              <h1>permissions page</h1>
+              {children}
             </main>
         </div>
     </div>
-    
-  );
+    )
 }
