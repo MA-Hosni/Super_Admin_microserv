@@ -93,7 +93,7 @@ export default function Home({ params }:any) {
                     />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.firstName}</h1>
+                        <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.lastName}</h1>
                         <p className="flex items-end gap-2 font-medium"><LiaUserShieldSolid size={25} /> Admin</p>
                         <p className="flex items-end gap-2 font-medium"><CiMail size={25} />{userData.email}</p>
                     </div>
