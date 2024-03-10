@@ -38,3 +38,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 npm install react-icons
+npm install @mui/x-data-grid
+npm install @mui/material @emotion/react @emotion/styled
+npm i axios jsonwebtoken mongoose react-hot-toast nodemailer
+npm i bcrypt
+npm i --save-dev @types/bcrypt

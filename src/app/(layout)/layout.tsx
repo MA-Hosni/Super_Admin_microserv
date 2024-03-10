@@ -14,7 +14,7 @@ export default function Layout({
         </div>    
         <div className="content">
             <Navbar />
-            <main className="bg-pink-500">
+            <main>
               {children}
             </main>
         </div>
