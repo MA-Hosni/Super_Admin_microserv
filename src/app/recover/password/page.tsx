@@ -20,15 +20,12 @@ export default function Home() {
       if (validationResult === true) {
         setLoading(true);
         const response = await axios.post("/api/users/forgotpasswordemail", user);
-        console.log("Forgot password - Email sent", response.data);
-        toast.success("Forgot password - Email sent");
+        toast.success('Forgot password email sent')
         setForgotPasswordStatus(true);
         setUser({ email: "" });
       }
     } catch (error: any) {
       console.log("Forgot password - Email failed", error.message);
-      toast.error(error.message);
-      toast.error("mochkla fil front recover/password")
     }
     finally {
       setLoading(false);
