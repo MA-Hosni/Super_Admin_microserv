@@ -10,7 +10,7 @@ export default function Home() {
         </div>    
         <div className="content">
             <Navbar />
-            <main className="bg-pink-500">
+            <main>
               <h1>dashboard page</h1>
             </main>
         </div>

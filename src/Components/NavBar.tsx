@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { PiBell , PiCaretDownBold } from "react-icons/pi";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +10,35 @@ import Link from 'next/link';
 
 const Navbar = () => {
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+})
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const res = await axios.get('/api/users/profiledata');
+        setUserData(res.data.user);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    }
+
+    getUserDetails();
+  }, []);
+
+
+  const logout = async () => {
+    try {
+      await axios.get('/api/users/logout');
+      router.push('/login');
+    } catch (error:any) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <nav className='sticky top-0 w-full px-16 flex flex-row-reverse items-center h-16'>
@@ -22,7 +52,7 @@ const Navbar = () => {
           />
           </div>
           <div className="ml-4">
-            <p className="text-base font-semibold">Profile</p>
+            <p className="text-base font-semibold">{userData.firstName} {userData.lastName}</p>
           </div>
           <div className="ml-4 ">
           <PiCaretDownBold />
@@ -33,7 +63,7 @@ const Navbar = () => {
             <ul className="pt-2 w-48">
               <li className='p-1'><Link href="/profile/personal" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-blue-100">My Profile</Link></li>
               <li className='p-1'><Link href="/profile/security" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-blue-100">Security</Link></li>
-              <li className='p-1'><Link href="#" className="rounded block px-4 py-2 text-gray-800 hover:bg-blue-100">Sign out</Link></li>
+              <li className='p-1'><button onClick={logout} className="rounded block px-4 py-2 text-gray-800 hover:bg-blue-100 w-full">Sign out</button></li>
             </ul>
           </div>
         )}
