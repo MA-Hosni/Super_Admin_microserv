@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      toast.error("User does not exist");
       return NextResponse.json(
         { error: "User Does not exist" },
         { status: 400 }
@@ -23,12 +22,9 @@ export async function POST(request: NextRequest) {
 
     await sendEmail({ email, emailType: "RESET", userId: user._id });
 
-
-    toast.success("Forgot password email sent");
     return NextResponse.json({ message: "Forgot password email sent" }, {status: 200});
 
   } catch (error: any) {
-    toast.error("catch error fil api forgotpassword mail");
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
