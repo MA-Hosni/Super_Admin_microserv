@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
 
     console.log(user);
     if (!user) {
-      toast.error("User does not exist");
       return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
 
@@ -31,14 +30,11 @@ export async function POST(request: NextRequest) {
     user.forgotPasswordTokenExpire = undefined;
     await user.save();
 
-
-    toast.success("Password changed successfully");
     return NextResponse.json(
       { message: "Password changed successfully" },
       { status: 200 }
     );
   } catch (error: any) {
-    toast.error("catch error fil api verifyforgotpassword");
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
