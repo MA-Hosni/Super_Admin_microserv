@@ -43,3 +43,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - npm i axios jsonwebtoken mongoose react-hot-toast nodemailer
 - npm i bcrypt
 - npm i --save-dev @types/bcrypt
+- npm i --save-dev @types/nodemailer
