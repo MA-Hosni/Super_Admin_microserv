@@ -38,7 +38,7 @@ export default function Home() {
   useEffect(() => {
     const urlToken = window.location.search.split("=")[1];
     setToken(urlToken || "");
-  });
+  },[]);
 
   return (
     <div className={style.container}>
