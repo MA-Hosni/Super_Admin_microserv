@@ -23,12 +23,13 @@ export default function Home() {
     try {
       const validationResult = validateReset(newPassword);
       if (validationResult === true) {
-        const user = await axios.post("/api/users/verifyforgotpassword", {
+        await axios.post("/api/users/verifyforgotpassword", {
           token,
           newPassword,
         });
         setPasswordUpdated(true);
-        router.push("/login")
+        toast.success("Password changed successfully");
+        router.push("/login");
       }
     } catch (error: any) {
       setError(error.response.data);
