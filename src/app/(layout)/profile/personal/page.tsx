@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileNav from '@/Components/profile/profileNav';
-import Image from "next/image";
 import { LiaUserShieldSolid } from "react-icons/lia";
 import { CiMail } from "react-icons/ci";
 import { PiPencilSimpleLineLight } from "react-icons/pi";
@@ -19,6 +18,7 @@ export default function Home() {
     cin: "",
     dateofBirth: new Date(),
     address: "",
+    profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
   })
 
   useEffect(() => {
@@ -41,15 +41,13 @@ export default function Home() {
 
 
   return (
-  <div className="border-2 border-slate-200 p-4 rounded-lg mb-2">
+  <div className="mr-2 border-2 border-slate-200 p-4 rounded-lg mb-2">
           <div className=" w-full flex items-center justify-between p-2">
           <div className="flex gap-5">
             <div className="w-44 h-44 rounded-lg overflow-hidden">
-              <Image
+              <img
                 className="object-fill w-full h-full"
-                width={20}
-                height={20}
-                src="/images/marguerite.jpg"
+                src={userData.profilePhoto}
                 alt="Profile Picture"
               />
             </div>

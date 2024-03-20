@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import User from "@/models/userModel";
+import Pack from "@/models/packageModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -17,31 +17,31 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
         }
 
         const reqBody = await req.json();
-        const { firstName, lastName, email, matricule, phoneNumber, cin, dateofBirth, address } = reqBody;
+        const { packageName, packagePrice, keyBenefits } = reqBody;
 
-        if (!firstName || !lastName || !email || !matricule || !phoneNumber || !cin || !dateofBirth || !address) {
+        if (!packageName || !packagePrice || !keyBenefits) {
             return NextResponse.json({
                 error: "Missing required fields",
                 success: false
             }, { status: 400 });
         }
 
-        const manager = await User.findByIdAndUpdate(id, reqBody, { new: true });
+        const updatedPackage = await Pack.findByIdAndUpdate(id, reqBody, { new: true });
 
-        if (!manager) {
+        if (!updatedPackage) {
             return NextResponse.json({
-                error: "Manager not found",
+                error: "Package not found",
                 success: false
             }, { status: 404 });
         }
 
         return NextResponse.json({
-            message: "Manager updated successfully",
+            message: "Package updated successfully",
             success: true,
-            manager
+            updatedPackage
         });
     } catch (error:any) {
-        console.error("Error updating manager:", error);
+        console.error("Error updating package:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

@@ -1,10 +1,10 @@
-import style from "@/Components/manager/deleteChecker.module.css"
+import style from "@/Components/companies/popUpDelete.module.css"
 import { useState } from "react";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const DeleteChecker = ({ manager, onClose }:any) => {
-    const { _id, firstName, lastName, email } = manager;
+const PopUpDelete = ({ company, onClose }:any) => {
+    const { _id, companyName, email } = company;
     const [enteredEmail, setEnteredEmail] = useState("");
     const [error, setError] = useState("");
   
@@ -12,8 +12,8 @@ const DeleteChecker = ({ manager, onClose }:any) => {
       if (enteredEmail === email) {
         try {
             console.log(_id)
-            const response = await axios.delete(`/api/managers/managerdelete?id=${_id}`);
-            toast.success('Manager deleted successfully');
+            const response = await axios.delete(`/api/companies/companydelete?id=${_id}`);
+            toast.success('Company deleted successfully');
             
         } catch (error) {
             toast.error('Error delete manager')
@@ -28,11 +28,10 @@ const DeleteChecker = ({ manager, onClose }:any) => {
   return (
     <div className={style.form}>
       <span className={style.title}>
-        Delete manager {firstName} {lastName}
+        Delete Company {companyName}
       </span>
       <p className={style.description}>
-        This action cannot be undone. This will permanently delete {firstName}{" "}
-        {lastName}. <br />
+        This action cannot be undone. This will permanently delete <b>{companyName}</b> Company. <br />
         <br /> Please type <b>{email}</b> to confirm.
       </p>
       <div>
@@ -55,4 +54,4 @@ const DeleteChecker = ({ manager, onClose }:any) => {
   );
 }
 
-export default DeleteChecker
+export default PopUpDelete

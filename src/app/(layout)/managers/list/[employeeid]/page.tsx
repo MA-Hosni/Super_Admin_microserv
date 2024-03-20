@@ -25,6 +25,7 @@ export default function Home({ params }:any) {
         cin: "",
         dateofBirth: "",
         address: "",
+        profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
       })
     const backToList = () => {
       router.push("/managers/list");
@@ -75,7 +76,7 @@ export default function Home({ params }:any) {
         }
     }
     return (
-        <div className="border-2 border-slate-200 p-4 rounded-lg mb-2"> 
+        <div className="mr-2 border-2 border-slate-200 p-4 rounded-lg mb-2"> 
         <Toaster position='top-center' reverseOrder={false}></Toaster>
             <button onClick={backToList} className="w-54 flex items-center gap-2 text-pink-500 font-bold border-b-4 border-pink-500 rounded-sm p-1 mx-4 mb-9">
                 <FaArrowLeftLong size={18} />
@@ -84,11 +85,9 @@ export default function Home({ params }:any) {
             <div className=" w-full flex items-center justify-between py-2 px-12">
                 <div className="flex gap-5">
                     <div className="w-44 h-44 rounded-lg overflow-hidden">
-                    <Image
+                    <img
                         className="object-fill w-full h-full"
-                        width={20}
-                        height={20}
-                        src="/images/marguerite.jpg"
+                        src={userData.profilePhoto}
                         alt="Profile Picture"
                     />
                     </div>

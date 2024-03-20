@@ -6,49 +6,44 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { PiTrashSimpleBold, PiEyeBold } from "react-icons/pi";
 import axios from 'axios';
 import Link from 'next/link';
-import DeleteChecker from '@/Components/manager/deleteChecker';
 import toast, { Toaster } from 'react-hot-toast';
+import PopUpDelete from '@/Components/companies/popUpDelete';
 
 
 
-export default function ManagerList() {
+export default function CompaniesList() {
   const columns: GridColDef[] = [
-    { field: '_id', headerName: 'ID', width: 150 },
+    { field: '_id', headerName: 'ID', width: 120 },
     {
-      field: 'profilePhoto',
-      headerName: 'Profile Photo',
+      field: 'logo',
+      headerName: 'Company Logo',
       align: 'center',
       sortable: false,
-      width: 100,
+      width: 130,
       renderCell: (params) => (
-        <div className="w-8 h-8 bg-transparent rounded-lg border-solid border border-gray-200">
+        <div className="w-24 h-8 bg-transparent rounded-lg border-solid border border-gray-200">
           <img  className="object-fill w-full h-full rounded-lg" 
-          src={params.row.profilePhoto}
+          src={params.row.logo}
           alt="Profile Picture"
           />
         </div>
       ),
     },
     {
-      field: 'firstName',
-      headerName: 'First Name',
+      field: 'companyName',
+      headerName: 'Company Name',
       width: 130,
     },
     {
-      field: 'lastName',
-      headerName: 'Last Name',
-      width: 130,
-    },
-    {
-      field: 'matricule',
-      headerName: 'Manager ID',
-      width: 120,
-    },
-    {
-      field: 'role',
-      headerName: 'Role',
+      field: 'industry',
+      headerName: 'Industry',
       type: 'singleSelect',
       width: 120,
+    },
+    {
+      field: 'employees',
+      headerName: 'Total Employees',
+      width: 130,
     },
     {
       field: 'email',
@@ -58,17 +53,21 @@ export default function ManagerList() {
     {
       field: 'phoneNumber',
       headerName: 'Phone Number',
+      width: 130,
+    },
+    {
+      field: 'companyAddress',
+      headerName: 'Address',
       width: 150,
     },
     {
       field: 'actions',
       headerName: 'Actions',
       sortable: false,
-      align: 'center',
-      width: 75,
+      width: 120,
       renderCell: (params) => (
         <>
-          <Link href={`/managers/list/${params.row._id}`}><PiEyeBold size={20} style={{ cursor: 'pointer', marginRight: 8 }} /></Link>
+          <Link href={`/companies/list/${params.row._id}`}><PiEyeBold size={20} style={{ cursor: 'pointer', marginRight: 8 }} /></Link>
           <button onClick={() => handleDelete(params.row)}>
             <PiTrashSimpleBold size={20} style={{ cursor: 'pointer', color: 'red' }} />
           </button>
@@ -78,32 +77,35 @@ export default function ManagerList() {
   ];
   const [rows, setRows] = useState([]);
   const [displayed, setDisplayed] = useState(false)
-  const [selectedManager, setSelectedManager] = useState({
+  const [selectedCompany, setSelectedCompany] = useState({
     _id: "",
-    firstName: "",
-    lastName: "",
+    companyName: "",
     email: "",
   }); // Details for DeleteChecker
+
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/managers/listmanagers");
+        const response = await axios.get("/api/companies/listcompanies");
         const dataWithId = response.data.map((row:any) => ({
           ...row,
           id: row._id
         }));
         setRows(dataWithId);
       } catch (error) {
-        console.error('Error fetching managers:', error);
+        toast.error("Error fetching companies")
+        console.error('Error fetching companies:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleDelete = (manager:any) => {
-    setSelectedManager(manager);
+  const handleDelete = (company:any) => {
+    setSelectedCompany(company);
     setDisplayed(!displayed);
   };
 
@@ -114,9 +116,9 @@ export default function ManagerList() {
         rows={rows}
         columns={columns}
       />
-      {selectedManager && displayed && (
-        <DeleteChecker
-          manager={selectedManager}
+      {selectedCompany && displayed && (
+        <PopUpDelete
+          company={selectedCompany}
           onClose={() => setDisplayed(false)}
         />
       )}

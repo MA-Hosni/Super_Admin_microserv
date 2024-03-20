@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const ClientUserSchema = new mongoose.Schema({
     firstName: { 
         type: String, 
         required: true,
@@ -18,11 +18,6 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true, 
     },
-    matricule: { 
-        type: String, 
-        required: true,
-        unique: true,
-    },
     phoneNumber: { 
         type: String, 
         required: true,
@@ -32,11 +27,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    dateofBirth: { 
-        type: Date, 
-        required: true, 
-    },
-    address: { 
+    role: { 
         type: String, 
         required: true,
     },
@@ -44,18 +35,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
     },
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
+    },
     isVerified: {
         type: Boolean,
         default: false,
     },
-    forgotPasswordToken: String,
-    forgotPasswordTokenExpire: Date,
     verifyToken: String,
     verifyTokenExpire: Date,
 }, {
     timestamps: true,
 });
 
-const User = mongoose.models.Manager || mongoose.model('Manager', userSchema);
+const UserClient = mongoose.models.UserClient || mongoose.model('UserClient', ClientUserSchema);
 
-export default User;
+export default UserClient;

@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import User from "@/models/userModel";
+import Company from "@/models/companyModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -17,31 +17,31 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
         }
 
         const reqBody = await req.json();
-        const { firstName, lastName, email, matricule, phoneNumber, cin, dateofBirth, address } = reqBody;
+        const {logo, companyName, industry, companyAddress, companyCity, companyZipCode, companyCountry, email, phoneNumber, pricingPlan } = reqBody;
 
-        if (!firstName || !lastName || !email || !matricule || !phoneNumber || !cin || !dateofBirth || !address) {
+        if (!companyName || !industry || !email || !companyAddress || !phoneNumber || !companyCity || !companyZipCode || !companyCountry) {
             return NextResponse.json({
                 error: "Missing required fields",
                 success: false
             }, { status: 400 });
         }
 
-        const manager = await User.findByIdAndUpdate(id, reqBody, { new: true });
+        const company = await Company.findByIdAndUpdate(id, reqBody, { new: true });
 
-        if (!manager) {
+        if (!company) {
             return NextResponse.json({
-                error: "Manager not found",
+                error: "company not found",
                 success: false
             }, { status: 404 });
         }
 
         return NextResponse.json({
-            message: "Manager updated successfully",
+            message: "company updated successfully",
             success: true,
-            manager
+            company
         });
     } catch (error:any) {
-        console.error("Error updating manager:", error);
+        console.error("Error updating company:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
