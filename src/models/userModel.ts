@@ -48,6 +48,12 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    twoFactor: {
+        type: Boolean,
+        default: false,
+    },
+    otpCode: String,
+    otpCodeExpire: Date,
     forgotPasswordToken: String,
     forgotPasswordTokenExpire: Date,
     verifyToken: String,

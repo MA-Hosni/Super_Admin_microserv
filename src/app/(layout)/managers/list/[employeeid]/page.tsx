@@ -54,7 +54,7 @@ export default function Home({ params }:any) {
     const onUpdate = async () => {
         try {
                 const response = await axios.patch(`/api/managers/managerupdate?id=${managerId}`, userData);
-                console.log("Sign up success", response.data);
+                console.log("manager updated successfully", response.data);
                 toast.success("manager updated successfully");
                 setEdit(false)
         } catch (error:any) {
@@ -171,16 +171,6 @@ export default function Home({ params }:any) {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         {...(edit ? {} : { disabled: true })}
                     />
-                    {/* <select id="role" defaultValue="other" className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option value="other">Other</option>
-                        <option value="HRM">HR Manager</option>
-                        <option value="HRS">HR specialist</option>
-                        <option value="IT">IT department</option>
-                        <option value="MT">management team</option>
-                        <option value="OT">operations team</option>
-                        <option value="accounting">accounting</option>
-                        <option value="intern">I am an intern</option>
-                    </select> */}
                     </div>
                     <div className="mb-3 w-full">
                     <label htmlFor="matricule" className="block mb-2 text-sm font-medium text-gray-900">

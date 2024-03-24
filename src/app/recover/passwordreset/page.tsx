@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import { useState, useEffect } from "react";
 import style from './newpassword.module.css';
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";

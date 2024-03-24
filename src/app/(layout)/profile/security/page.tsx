@@ -6,20 +6,27 @@ import { HiOutlineFingerPrint } from "react-icons/hi";
 import { LiaUserLockSolid, LiaUserShieldSolid } from "react-icons/lia";
 import ProfileNav from '@/Components/profile/profileNav';
 import { CiMail } from "react-icons/ci";
-import { PiPencilSimpleLineLight } from "react-icons/pi";
+import toast, { Toaster } from 'react-hot-toast';
+import { validateChangePassword } from '@/helpers/profile/changePasswordValidator';
+import { FiLock, FiUnlock } from "react-icons/fi";
 
 
 export default function Home() {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [showButton, setShowButton] = useState(false);
+  const [isFormFilled, setIsFormFilled] = useState(false);
+  const [pwdVisible , setPwdVisible] = useState(false);
+  const [password, setPassword] = useState({
+    oldPassword:'',
+    newPassword:'',
+    confirmNewPassword:'',
+  });
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
+    twoFactor: false,
   })
+
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -29,50 +36,55 @@ export default function Home() {
       } catch (error: any) {
         console.log(error.message);
       }
-    }
-    
+    }  
+
     getUserDetails();
   }, []);
 
-
-  const handleOldPasswordChange = (event:any) => {
-    const value = event.target.value;
-    setOldPassword(value);
-    setShowButton(
-      value.length >= 8 && newPassword.length >= 8 && confirmNewPassword.length >= 8
+  useEffect(() => {
+    setIsFormFilled(
+      password.oldPassword !== '' &&
+      password.newPassword !== '' &&
+      password.confirmNewPassword !== ''
     );
+  }, [password]);
+
+  const handleSave = async () => {
+    try {
+      const validationResult = validateChangePassword(password.oldPassword,password.newPassword,password.confirmNewPassword);
+      if (validationResult === true) {
+        const res = await axios.post('/api/users/profilepasswordupdate', password);
+        setPassword({
+          oldPassword:'',
+          newPassword:'',
+          confirmNewPassword:'',
+        })
+        toast.success("Password updated successfully");
+      }
+    } catch (error:any) {
+      toast.error("Old Password not Valid");
+      console.log(error.message);
+    }
+
   };
 
-  const handleNewPasswordChange = (event:any) => {
-    const value = event.target.value;
-    setNewPassword(value);
-    setShowButton(
-      oldPassword.length >= 8 && value.length >= 8 && confirmNewPassword.length >= 8
-    );
-  };
-
-  const handleConfirmNewPasswordChange = (event:any) => {
-    const value = event.target.value;
-    setConfirmNewPassword(value);
-    setShowButton(
-      oldPassword.length >= 8 && newPassword.length >= 8 && value.length >= 8
-    );
-  };
-
-  const handleSave = () => {
-    // Add your save logic here
-    console.log("Old Password:", oldPassword);
-    console.log("New Password:", newPassword);
-    console.log("Confirm New Password:", confirmNewPassword);
-    // Clear inputs after saving if needed
-    setOldPassword('');
-    setNewPassword('');
-    setConfirmNewPassword('');
-    setShowButton(false);
-  };
+  const handleTFA = async (action: string) => {
+    try {
+      const response = await axios.post('/api/users/twofactorauth', { action });
+      setUserData(response.data.user);
+      if(response.data.success) {
+        const message = action === 'Enable' ? "enabled" : "disabled";
+        toast.success(`Two-factor authentication ${message} successfully`);
+      }
+    } catch (error) {
+      toast.error(`Failed to ${action.toLowerCase()} Two-factor authentication`);
+      console.error('Error with Two-factor Authentication:', error);
+    }
+};
 
   return (
     <div className="mr-2 border-2 border-slate-200 p-4 rounded-lg mb-2">
+      <Toaster position='top-center' reverseOrder={false}></Toaster>
       <div className=" w-full flex items-center justify-between p-2">
       <div className="flex gap-5">
         <div className="w-44 h-44 rounded-lg overflow-hidden">
@@ -109,55 +121,60 @@ export default function Home() {
             </p>
           </div>
           <div id="inputs" className="bg-pink-100 rounded-md w-[370px] flex flex-col gap-4 p-8">
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
                 Old Password
               </label>
               <input
-                type="text"
+                type={pwdVisible ? "text" : "password"}
                 id="password"
-                value={oldPassword}
-                onChange={handleOldPasswordChange}
+                value={password.oldPassword}
+                onChange={(e) => setPassword({...password, oldPassword: e.target.value})}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="•••••••••"
-                required
               />
+              <div className="absolute top-10 right-2 cursor-pointer" onClick={() => setPwdVisible(!pwdVisible)} >
+                { pwdVisible ? <FiUnlock /> : <FiLock /> }
+              </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
                 New Password
               </label>
               <input
-                type="text"
+                type={pwdVisible ? "text" : "password"}
                 id="password"
-                value={newPassword}
-                onChange={handleNewPasswordChange}
+                value={password.newPassword}
+                onChange={(e) => setPassword({...password, newPassword: e.target.value})}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="•••••••••"
-                required
               />
+              <div className="absolute top-10 right-2 cursor-pointer" onClick={() => setPwdVisible(!pwdVisible)} >
+                { pwdVisible ? <FiUnlock /> : <FiLock /> }
+              </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
                 Confirm new Password
               </label>
               <input
-                type="text"
+                type={pwdVisible ? "text" : "password"}
                 id="password"
-                value={confirmNewPassword}
-                onChange={handleConfirmNewPasswordChange}
+                value={password.confirmNewPassword}
+                onChange={(e) => setPassword({...password, confirmNewPassword: e.target.value})}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="•••••••••"
-                required
               />
+              <div className="absolute top-10 right-2 cursor-pointer" onClick={() => setPwdVisible(!pwdVisible)} >
+                { pwdVisible ? <FiUnlock /> : <FiLock /> }
+              </div>
             </div>
-            {showButton && (
-              <button onClick={handleSave}
-              className="text-pink-700 hover:text-white border border-pink-400 hover:bg-pink-400 focus:bg-pink-400 focus:text-white focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 mb-2">
-              Save Changes 
-              </button>
+            {isFormFilled && (
+            <button onClick={handleSave}
+            className="text-pink-700 hover:text-white border border-pink-400 hover:bg-pink-400 focus:bg-pink-400 focus:text-white focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 mb-2">
+            Save Changes 
+            </button>
             )}
-            
           </div>
         </div>
         <div id="two_factor" className="flex justify-evenly">
@@ -177,11 +194,21 @@ export default function Home() {
               After setting up next time you login it will require a code to
               validate your identity for extra security.
             </p>
-            <button
-              type="button"
-              className="text-pink-700 hover:text-white border border-pink-400 hover:bg-pink-400 focus:bg-pink-400 focus:text-white focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 mb-2">
-              Enable two-factor authentication
-            </button>
+            { userData.twoFactor ? (
+              <button
+                onClick={() => handleTFA('Disable')}
+                type="button"
+                className="text-pink-700 hover:text-white border border-pink-400 hover:bg-pink-400 focus:bg-pink-400 focus:text-white focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 mb-2">
+                Disable two-factor authentication
+              </button>
+            ) : (
+              <button
+                onClick={() => handleTFA('Enable')}
+                type="button"
+                className="text-pink-700 hover:text-white border border-pink-400 hover:bg-pink-400 focus:bg-pink-400 focus:text-white focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 mb-2">
+                Enable two-factor authentication
+              </button>
+            )}
           </div>
         </div>
       </section>

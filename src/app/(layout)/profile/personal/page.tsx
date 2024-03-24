@@ -6,6 +6,7 @@ import ProfileNav from '@/Components/profile/profileNav';
 import { LiaUserShieldSolid } from "react-icons/lia";
 import { CiMail } from "react-icons/ci";
 import { PiPencilSimpleLineLight } from "react-icons/pi";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
   const [edit, setEdit] = useState(false);
@@ -16,32 +17,46 @@ export default function Home() {
     matricule: "",
     phoneNumber: "",
     cin: "",
-    dateofBirth: new Date(),
+    dateofBirth: "",
     address: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
   })
 
-  useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-        const res = await axios.get('/api/users/profiledata');
-        console.log(res.data.user);
-        setUserData({...res.data.user, dateofBirth: new Date(res.data.user.dateofBirth)});
-      } catch (error: any) {
-        console.log(error.message);
-      }
+  const getUserDetails = async () => {
+    try {
+      const res = await axios.get('/api/users/profiledata');
+      console.log(res.data.user);
+      const formattedDateOfBirth = new Date(res.data.user.dateofBirth).toISOString().slice(0, 10);
+      setUserData({ ...res.data.user, dateofBirth: formattedDateOfBirth });
+    } catch (error: any) {
+      console.log(error.message);
     }
-    
+  }
+
+  useEffect(() => {
     getUserDetails();
   }, []);
 
-  const editManagerData = () => {
-    setEdit(!edit)
+  const onCancel = async () => {
+    getUserDetails();
+    setEdit(false);
   }
 
+  const updateUserData = async () => {
+    try {
+      const res = await axios.patch('/api/users/profileupdate', userData);
+      console.log("manager updated successfully", res.data);
+      toast.success("manager updated successfully");
+      setEdit(false);
+    } catch (error: any) {
+      toast.error("User update failed");
+      console.log("User update failed", error.message);
+    }
+  }
 
   return (
   <div className="mr-2 border-2 border-slate-200 p-4 rounded-lg mb-2">
+     <Toaster position='top-center' reverseOrder={false}></Toaster>
           <div className=" w-full flex items-center justify-between p-2">
           <div className="flex gap-5">
             <div className="w-44 h-44 rounded-lg overflow-hidden">
@@ -58,7 +73,7 @@ export default function Home() {
             </div>
           </div>
           { edit ? null : (            
-            <button onClick={editManagerData} className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex gap-2 h-12 items-center p-4 m-8">
+            <button onClick={() => {setEdit(!edit)}} className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex gap-2 h-12 items-center p-4 m-8">
                 <PiPencilSimpleLineLight size={20} />
                 <p className="font-medium">Edit Profile</p>
             </button>
@@ -81,6 +96,7 @@ export default function Home() {
                   type="text"
                   id="first_name"
                   value={userData.firstName}
+                  onChange={(e) => setUserData({...userData, firstName: e.target.value})}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   {...(edit ? {} : { disabled: true })}
                 />
@@ -93,6 +109,7 @@ export default function Home() {
                   type="text"
                   id="last_name"
                   value={userData.lastName}
+                  onChange={(e) => setUserData({...userData, lastName: e.target.value})}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   {...(edit ? {} : { disabled: true })}
                 />
@@ -108,7 +125,7 @@ export default function Home() {
                   id="email"
                   value={userData.email}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  {...(edit ? {} : { disabled: true })}
+                  disabled
                 />
               </div>
               <div className="mb-3 w-full">
@@ -116,9 +133,10 @@ export default function Home() {
                   Mobile Number
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   id="mobile"
                   value={userData.phoneNumber}
+                  onChange={(e) => setUserData({...userData, phoneNumber: e.target.value})}
                   maxLength={8}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   {...(edit ? {} : { disabled: true })}
@@ -132,7 +150,7 @@ export default function Home() {
                   type="text"
                   id="role"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  {...(edit ? {} : { disabled: true })}
+                  disabled
                 />
               </div>
               <div className="mb-3 w-full">
@@ -145,7 +163,7 @@ export default function Home() {
                   maxLength={6}
                   value={userData.matricule}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  {...(edit ? {} : { disabled: true })}
+                  disabled
                 />
               </div>
             </section>
@@ -157,7 +175,8 @@ export default function Home() {
                 <input
                   type="date"
                   id="birth"
-                  value={userData.dateofBirth.toISOString().split('T')[0]}
+                  value={userData.dateofBirth}
+                  onChange={(e) => setUserData({...userData, dateofBirth: e.target.value})}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   {...(edit ? {} : { disabled: true })}
                 />
@@ -172,7 +191,7 @@ export default function Home() {
                   maxLength={8}
                   value={userData.cin}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  {...(edit ? {} : { disabled: true })}
+                  disabled
                 />
               </div>
             </section>
@@ -185,6 +204,7 @@ export default function Home() {
                   type="text"
                   id="address"
                   value={userData.address}
+                  onChange={(e) => setUserData({...userData, address: e.target.value})}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   {...(edit ? {} : { disabled: true })}
                 />
@@ -192,10 +212,10 @@ export default function Home() {
             </section>
             {edit ? (
                   <div className="flex gap-4 self-end mt-4">
-                      <button onClick={editManagerData} className="bg-gray-200 hover:bg-pink-300 shadow-md rounded-md flex h-12 items-center p-4">
+                      <button onClick={onCancel} className="bg-gray-200 hover:bg-pink-300 shadow-md rounded-md flex h-12 items-center p-4">
                               <p className="font-medium">Cancel</p>
                       </button>
-                      <button className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex h-12 items-center p-4">
+                      <button onClick={updateUserData} className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex h-12 items-center p-4">
                           <p className="font-medium">Update information</p>
                       </button>
                   </div>
