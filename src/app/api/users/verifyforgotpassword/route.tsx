@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
 
     console.log(user);
     if (!user) {
+      toast.error("Invalid token")
       return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
 

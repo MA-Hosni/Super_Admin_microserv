@@ -10,7 +10,7 @@ connect()
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json()
-        const {firstName, lastName, email, password, matricule, phoneNumber, cin, dateofBirth, address} = reqBody
+        const {firstName, lastName, email, password, matricule, phoneNumber, cin, dateofBirth, address, profilePhoto} = reqBody
 
         console.log(reqBody);
 
@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
             phoneNumber,
             cin,
             dateofBirth,
-            address
+            address,
+            profilePhoto
         })
 
         const saverdUser = await newUser.save()

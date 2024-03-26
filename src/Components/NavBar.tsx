@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PiBell , PiCaretDownBold } from "react-icons/pi";
-import Image from 'next/image';
 import Link from 'next/link';
 
 
@@ -15,6 +14,7 @@ const Navbar = () => {
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
+    profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
 })
 
   useEffect(() => {
@@ -41,13 +41,11 @@ const Navbar = () => {
   }
 
   return (
-    <nav className='sticky top-0 w-full px-16 flex flex-row-reverse items-center h-16'>
+    <nav className='sticky top-0 w-full px-16 flex flex-row-reverse items-center h-16 bg-white z-10'>
         <button onClick={() => setIsDropdownOpen((prev) => !prev)} className="flex items-center ml-4 p-2 bg-white rounded-lg border-solid border-2 border-gray-200">
           <div className="w-8 h-8 bg-black rounded-lg border-solid border border-gray-200">
-          <Image className="object-fill w-full h-full rounded-lg"
-          width={32}
-          height={32} 
-          src="/images/marguerite.jpg"
+          <img  className="object-fill w-full h-full rounded-lg" 
+          src={userData.profilePhoto}
           alt="Profile Picture"
           />
           </div>

@@ -1,7 +1,7 @@
 import style from "@/Components/manager/deleteChecker.module.css"
 import { useState } from "react";
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const DeleteChecker = ({ manager, onClose }:any) => {
     const { _id, firstName, lastName, email } = manager;
@@ -30,7 +30,7 @@ const DeleteChecker = ({ manager, onClose }:any) => {
       <span className={style.title}>
         Delete manager {firstName} {lastName}
       </span>
-      <p className={style.description}>{_id}
+      <p className={style.description}>
         This action cannot be undone. This will permanently delete {firstName}{" "}
         {lastName}. <br />
         <br /> Please type <b>{email}</b> to confirm.

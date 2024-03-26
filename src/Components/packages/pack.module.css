@@ -1,0 +1,40 @@
+#message {
+    height: auto;
+    width: 210px; /* Equivalent to w-[210px] */
+    color: #fff; /* Equivalent to text-white */
+    background-color: rgb(244 114 182); /* Equivalent to bg-pink-400 */
+    resize: none; /* Equivalent to resize-none */
+  }
+#textarea {
+  height: auto;
+  width: 210px; /* Equivalent to w-[210px] */
+  color: #fff; /* Equivalent to text-white */
+  background-color: rgb(244 114 182); /* Equivalent to bg-pink-400 */
+  resize: none;
+}
+
+#list {
+    overflow-y: scroll;
+}
+
+#list::-webkit-scrollbar {
+    width: 0; /* Width of the scrollbar */
+  }
+  
+  /* Handle */
+#list::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Make the scrollbar thumb transparent */
+  }
+
+/* #message {
+    overflow-y: scroll;
+}
+
+#message::-webkit-scrollbar {
+    width: 0; /* Width of the scrollbar */
+  /* } */
+  
+  /* Handle */
+/* #message::-webkit-scrollbar-thumb { */
+    /* background-color: transparent; Make the scrollbar thumb transparent */
+  /* } */

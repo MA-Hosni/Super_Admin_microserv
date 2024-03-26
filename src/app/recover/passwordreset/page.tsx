@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import { useState, useEffect } from "react";
 import style from './newpassword.module.css';
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -17,7 +16,6 @@ export default function Home() {
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-  const [error, setError] = useState(false);
 
   const updateNewPassword = async () => {
     try {
@@ -32,7 +30,16 @@ export default function Home() {
         router.push("/login");
       }
     } catch (error: any) {
-      setError(error.response.data);
+      toast.error("Invalid token");
+      toast((t) => (
+        <span className="flex gap-1 items-center">
+          <p>❗</p>
+          Reset password Token is only valid for 5 min
+          <button className="rounded-md bg-slate-200 border p-1 font-semibold" onClick={() => router.push("/recover/password")}>
+            Resend Token
+          </button>
+        </span>
+      ));
     }
   };
 
@@ -77,13 +84,6 @@ export default function Home() {
         <button onClick={updateNewPassword} className={style.signin_btn}>
           <span>Reset password</span>
         </button>
-
-
-        {error && (
-        <div>
-          <h2 className="text-2xl bg-red-500 text-black">Error</h2>
-        </div>
-        )}
       </div>
     </div>
   );

@@ -10,9 +10,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { validateManager } from "@/helpers/validatorManager";
 
 export default function Home() {
+    // Cloud name: djfoa8ffg
+    // Upload presets: bsxm6ivt
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [image, setImage] = useState<File | null>(null);
+    const [file, setFile] = useState(null)
     const [pwdVisible , setPwdVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({
@@ -25,6 +28,7 @@ export default function Home() {
         cin: "",
         dateofBirth: "",
         address: "",
+        profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
     })
 
     const onSignup = async () => {
@@ -32,6 +36,13 @@ export default function Home() {
             const validationResult = validateManager(user.firstName,user.lastName,user.email,user.password,user.matricule,user.phoneNumber,user.cin,user.dateofBirth,user.address);
             if (validationResult === true) {
                 setLoading(true);
+                if(file != null){
+                    const form = new FormData()
+                    form.append('file', file)
+                    form.append("upload_preset", "bsxm6ivt");
+                    await axios.post("https://api.cloudinary.com/v1_1/djfoa8ffg/upload", form).then((result) => {user.profilePhoto = result.data.secure_url});
+                    console.log(user.profilePhoto);
+                }
                 const response = await axios.post("/api/users/signup", user);
                 console.log("Sign up success", response.data);
                 toast.success("New manager created successfully");
@@ -52,13 +63,14 @@ export default function Home() {
     const handleImageChange = (event: any) => {
         const file = event.target.files[0];
         setImage(file);
+        setFile(event.target.files[0]);
     }
 
     const handleCancel = () => {
         router.push("/managers/list");
     }
   return (
-    <section className="border-2 border-slate-200 p-4 rounded-lg flex flex-col">
+    <section className="mr-2 border-2 border-slate-200 p-4 rounded-lg flex flex-col">
         <Toaster position='top-center' reverseOrder={false}></Toaster>
         <span className="w-54 flex gap-2 text-pink-500 font-bold border-b-4 border-pink-500 rounded-sm p-4">
             <FaUser size={20} />ADD NEW MANAGER
@@ -142,16 +154,6 @@ export default function Home() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
                     disabled
                 />
-                {/* <select id="role" defaultValue="other" className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5">
-                    <option value="other">Other</option>
-                    <option value="HRM">HR Manager</option>
-                    <option value="HRS">HR specialist</option>
-                    <option value="IT">IT department</option>
-                    <option value="MT">management team</option>
-                    <option value="OT">operations team</option>
-                    <option value="accounting">accounting</option>
-                    <option value="intern">I am an intern</option>
-                </select> */}
                 </div>
                 <div className="mb-3 w-full">
                 <label htmlFor="matricule" className="block mb-2 text-sm font-medium text-gray-900">

@@ -4,31 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
-// export async function PATCH(req:NextRequest, res:NextResponse ) {
-//   const url = req.nextUrl;
-//   const id = url.searchParams.get('id');
-//     try {
-//         const reqBody = await req.json()
-//         const {firstName, lastName, email, matricule, phoneNumber, cin, dateofBirth, address} = reqBody
-//         console.log(reqBody);
-//         console.log(id)
-//         // if(id && reqBody) {
-//         //     const manager = await User.findByIdAndUpdate(id, reqBody);
-//         //     return NextResponse.json({
-//         //         message: "User updated successfully",
-//         //         success: true,
-//         //         manager
-//         //     })
-//         // }
-//         // const manager = await User.findOne({ _id: id }).select("-password -isVerified -createdAt -updatedAt");
-//         // Return the managers
-//         return NextResponse.json({message: "body", reqBody});
-//     } catch (error:any) {
-//         // Handle errors
-//         console.error("Error fetching managers:", error);
-//         return NextResponse.json({ error: error.message }, { status: 500 });
-//     }
-//   }
 export async function PATCH(req: NextRequest, res: NextResponse) {
     const url = req.nextUrl;
     const id = url.searchParams.get('id');

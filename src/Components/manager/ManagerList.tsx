@@ -15,14 +15,29 @@ export default function ManagerList() {
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'ID', width: 150 },
     {
+      field: 'profilePhoto',
+      headerName: 'Profile Photo',
+      align: 'center',
+      sortable: false,
+      width: 100,
+      renderCell: (params) => (
+        <div className="w-8 h-8 bg-transparent rounded-lg border-solid border border-gray-200">
+          <img  className="object-fill w-full h-full rounded-lg" 
+          src={params.row.profilePhoto}
+          alt="Profile Picture"
+          />
+        </div>
+      ),
+    },
+    {
       field: 'firstName',
       headerName: 'First Name',
-      width: 150,
+      width: 130,
     },
     {
       field: 'lastName',
       headerName: 'Last Name',
-      width: 150,
+      width: 130,
     },
     {
       field: 'matricule',
@@ -38,7 +53,7 @@ export default function ManagerList() {
     {
       field: 'email',
       headerName: 'Email',
-      width: 230,
+      width: 200,
     },
     {
       field: 'phoneNumber',
@@ -49,7 +64,8 @@ export default function ManagerList() {
       field: 'actions',
       headerName: 'Actions',
       sortable: false,
-      width: 120,
+      align: 'center',
+      width: 75,
       renderCell: (params) => (
         <>
           <Link href={`/managers/list/${params.row._id}`}><PiEyeBold size={20} style={{ cursor: 'pointer', marginRight: 8 }} /></Link>
@@ -92,7 +108,7 @@ export default function ManagerList() {
   };
 
   return (
-    <Box sx={{ height: 'auto', width: '100%' }}>
+    <Box sx={{ height: '400px', width: '100%' }}>
       <Toaster position='top-center' reverseOrder={false}></Toaster>
       <DataGrid
         rows={rows}
