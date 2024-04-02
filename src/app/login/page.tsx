@@ -14,6 +14,7 @@ import Link from "next/link";
 export default function Home() {
   const router = useRouter()
   const [pwdVisible , setPwdVisible] = useState(false);
+  const [loading , setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -23,6 +24,7 @@ export default function Home() {
     try {
       const validationResult = validatelogin(user.email,user.password);
       if (validationResult === true) {
+        setLoading(true);
         const response = await axios.post("/api/users/login", user);
         console.log("Login success", response.data);
         if(response.data.tfa === true){
@@ -33,12 +35,11 @@ export default function Home() {
           toast.success('Login success');
           router.push("/");
         }
-
       }
     } catch (error: any) {
-      console.log("login failed", error.message);
-      toast.error("login failed");
-      toast.error("Check Email or Password you’ve entered");
+      toast.error(error.response.data.error);
+    }finally {
+      setLoading(false);
     }
   }
 
@@ -91,8 +92,10 @@ export default function Home() {
           </div>
         </div>
         
-        <button title="Sign In" onClick={onLogin} className={style.signin_btn}>
-          <span>Sign In</span>
+        <button title="Sign In" onClick={onLogin} className={style.signin_btn} disabled={loading} >
+          <span>
+              {loading ? ("Loading...") : ("Sign In")}
+          </span>
         </button>
 
         <div className={style.separator}>

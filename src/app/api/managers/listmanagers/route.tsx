@@ -9,7 +9,7 @@ connect()
 export async function GET(req: NextRequest) {
     try {
         // Retrieve managers from the database
-        const managers = await User.find({});
+        const managers = await User.find({ isDeleted: false });
         // Return the managers
         return NextResponse.json(managers); // Return a NextResponse with JSON data
     } catch (error:any) {

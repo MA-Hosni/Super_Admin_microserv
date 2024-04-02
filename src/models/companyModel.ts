@@ -1,4 +1,4 @@
-import mongoose, { Schema, mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const companySchema = new mongoose.Schema({
     logo: { 
@@ -45,6 +45,10 @@ const companySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Plans', 
         required: true 
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
     },
 }, {
     timestamps: true,

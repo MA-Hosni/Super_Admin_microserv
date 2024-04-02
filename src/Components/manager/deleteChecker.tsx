@@ -12,7 +12,7 @@ const DeleteChecker = ({ manager, onClose }:any) => {
       if (enteredEmail === email) {
         try {
             console.log(_id)
-            const response = await axios.delete(`/api/managers/managerdelete?id=${_id}`);
+            const response = await axios.patch(`/api/managers/managerdelete?id=${_id}`);
             toast.success('Manager deleted successfully');
             
         } catch (error) {
@@ -26,31 +26,33 @@ const DeleteChecker = ({ manager, onClose }:any) => {
       }
     };
   return (
-    <div className={style.form}>
-      <span className={style.title}>
-        Delete manager {firstName} {lastName}
-      </span>
-      <p className={style.description}>
-        This action cannot be undone. This will permanently delete {firstName}{" "}
-        {lastName}. <br />
-        <br /> Please type <b>{email}</b> to confirm.
-      </p>
-      <div>
-      <input 
-            placeholder="Enter the email here" 
-            type="email" 
-            name="email" 
-            id="email-address" 
-            value={enteredEmail}
-            onChange={(e) => setEnteredEmail(e.target.value)}
-        />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div className={style.boutounet}>
-            <button className={style.boutou} onClick={onClose}>Cancel</button>
-            <button onClick={handleConfirm}>Confirm Deletion</button>
-        </div>
-        
+    <div className="absolute top-4 right-1/3 z-20">
+    <div className={style.card}>
+      <button className={style.dismiss} onClick={onClose}>×</button>
+      <div className={style.header}>
+          <span className={style.title}>
+            Delete manager {firstName} {lastName}
+          </span>
+          <p className={style.description}>
+            This action cannot be undone. This will permanently delete {firstName}{" "}{lastName}. <br />
+            <br /> Please type <b>{email}</b> to confirm.
+          </p>
+          <br />
+          <input 
+          placeholder="Enter the email here" 
+          type="email" 
+          name="email" 
+          id="email-address" 
+          value={enteredEmail}
+          onChange={(e) => setEnteredEmail(e.target.value)}
+          />
+          {error && <p className="text-xs" style={{ color: 'red' }}>{error}</p>}
+      
+          <div className={style.actions}>
+              <button type="button" className={style.history} onClick={handleConfirm}>Confirm Deletion</button>
+          </div>
       </div>
+    </div>
     </div>
   );
 }

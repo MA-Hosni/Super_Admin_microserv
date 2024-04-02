@@ -1,4 +1,4 @@
-import mongoose, { Schema, mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const packSchema = new mongoose.Schema({
     packageName: { 
@@ -8,6 +8,19 @@ const packSchema = new mongoose.Schema({
     packagePrice: { 
         type: Number, 
         required: true, 
+    },
+    packageType: {
+        type: String,
+        enum: ['membership', 'per_user'], // Define possible values for packageType
+        default: 'membership' // Default value for packageType
+    },
+    minUsers: {
+        type: Number,
+        default: 1 // Default value for minUsers
+    },
+    maxUsers: {
+        type: Number,
+        default: 10 // Default value for maxUsers
     },
     keyBenefits: [{
         type: String

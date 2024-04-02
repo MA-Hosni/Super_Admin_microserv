@@ -25,17 +25,7 @@ export default function Home({ params }:any) {
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`/api/packages/packdata?id=${packageId}`);
-                const { packageName, packagePrice, packageType, minUsers, maxUsers, keyBenefits } = response.data;
-                setNamePrice({ packageName, packagePrice, packageType, minUsers, maxUsers });
-                setTextareas(keyBenefits);
-            } catch (error) {
-                console.error("Error fetching package data:", error);
-            }
-        };
-        fetchData();
+        
     }, [packageId]);
 
     const addTextarea = () => {
@@ -65,44 +55,23 @@ export default function Home({ params }:any) {
     };
 
     const handleUpdate = async () => {
-        try {
-            const validationResult = validatePack(namePrice.packageName, namePrice.packagePrice, namePrice.minUsers, namePrice.maxUsers);
-            if (validationResult === true) {
-                setLoading(true);
-                // Update package data
-                const updatedPackage = {
-                    packageName: namePrice.packageName,
-                    packagePrice: namePrice.packagePrice,
-                    packageType: namePrice.packageType,
-                    minUsers: namePrice.minUsers,
-                    maxUsers: namePrice.maxUsers,
-                    keyBenefits: textareas
-                };
-                await axios.patch(`/api/packages/packupdate?id=${packageId}`, updatedPackage);
-                setEdit(false);
-                toast.success("Package updated successfully");
-                console.log("Package updated successfully");
-            }
-        } catch (error) {
-            console.error("Error updating package:", error);
-        } finally{
-            setLoading(false);
-        }
+        
     };
     return (
-        <section className="mr-2 border-2 border-slate-200 p-4 rounded-lg flex flex-col mb-2">
-            <Toaster position='top-center' reverseOrder={false}></Toaster>
-            <div className="flex w-full justify-between">
+        <section className="mr-2 border-2 border-slate-200 rounded-lg flex flex-col mb-2">
+            <div className="flex w-full justify-between border-b-2 p-2">
                 <button onClick={backToList} className="w-54 flex items-center gap-2 text-pink-500 font-bold mx-4 ">
                     <FaArrowLeftLong size={22} />
                     <span className="text-xl">Back</span>
                 </button>
-                {edit ? null : (
-                    <button onClick={editPackageData} className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex gap-2 h-12 items-center p-4 m-8">
+                <h1>Group Name</h1>
+                <button>plus</button>
+                {/* {edit ? null : (
+                    <button onClick={editPackageData} className="bg-pink-500 text-white hover:bg-pink-300 shadow-md rounded-md flex gap-2 h-12 items-center p-4">
                         <PiPencilSimpleLineLight size={20} />
                         <p className="font-medium">Edit Pack</p>
                     </button>
-                )}
+                )} */}
             </div>
 
             <section className=" h-full py-14 px-12">

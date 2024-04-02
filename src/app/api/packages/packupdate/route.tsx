@@ -17,14 +17,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
         }
 
         const reqBody = await req.json();
-        const { packageName, packagePrice, keyBenefits } = reqBody;
-
-        if (!packageName || !packagePrice || !keyBenefits) {
-            return NextResponse.json({
-                error: "Missing required fields",
-                success: false
-            }, { status: 400 });
-        }
+        const { packageName, packagePrice, packageType, minUsers, maxUsers, keyBenefits } = reqBody;
 
         const updatedPackage = await Pack.findByIdAndUpdate(id, reqBody, { new: true });
 

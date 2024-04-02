@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     firstName: { 
@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema({
         default: false,
     },
     twoFactor: {
+        type: Boolean,
+        default: false,
+    },
+    isDeleted: {
         type: Boolean,
         default: false,
     },

@@ -9,10 +9,19 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json()
         console.log(reqBody);
+        if (!reqBody.packageType) {
+            return NextResponse.json(
+                { error: "packageType is required" },
+                { status: 400 }
+            );
+        }
         // Create a new package document using the Pack model
         const newPackage = new Pack({
             packageName: reqBody.packageName,
             packagePrice: reqBody.packagePrice,
+            packageType: reqBody.packageType,
+            minUsers: reqBody.minUsers,
+            maxUsers: reqBody.maxUsers,
             keyBenefits: reqBody.keyBenefits
         });
 

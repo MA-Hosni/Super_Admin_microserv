@@ -45,8 +45,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - npm i --save-dev @types/bcrypt
 - npm i --save-dev @types/nodemailer
 - npm install mui-one-time-password-input
-
-
+- yarn add @reduxjs/toolkit react-redux
+- yarn add redux-persist
 
 
 npm i @vercel/speed-insights

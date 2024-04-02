@@ -15,17 +15,17 @@ export default function Home() {
   const [pwdVisible , setPwdVisible] = useState(false);
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [loading , setLoading] = useState(false);
 
   const updateNewPassword = async () => {
     try {
       const validationResult = validateReset(newPassword);
       if (validationResult === true) {
+        setLoading(true);
         await axios.post("/api/users/verifyforgotpassword", {
           token,
           newPassword,
         });
-        setPasswordUpdated(true);
         toast.success("Password changed successfully");
         router.push("/login");
       }
@@ -40,6 +40,8 @@ export default function Home() {
           </button>
         </span>
       ));
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -81,8 +83,10 @@ export default function Home() {
           </div>
         </div>
         
-        <button onClick={updateNewPassword} className={style.signin_btn}>
-          <span>Reset password</span>
+        <button onClick={updateNewPassword} className={style.signin_btn} disabled={loading}>
+          <span>
+              {loading ? ("Loading...") : ("Reset password")}
+          </span>
         </button>
       </div>
     </div>

@@ -11,10 +11,9 @@ import { FiLock, FiUnlock } from "react-icons/fi";
 import { MuiOtpInput } from 'mui-one-time-password-input'
 
 export default function Home() {
-  const router = useRouter()
-  const [token, setToken] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const router = useRouter();
   const [otp, setOtp] = useState("");
+  const [loading , setLoading] = useState(false);
 
   const handleChange = (newValue:any) => {
     setOtp(newValue);
@@ -23,6 +22,7 @@ export default function Home() {
   const handleVerification = async () => {
     try {
       if(otp.length === 6){
+        setLoading(true);
         const response = await axios.post("/api/users/loginwithtfa", {otp});
         console.log("Login success", response.data);
         toast.success('Login success');
@@ -31,8 +31,9 @@ export default function Home() {
         toast.error("Invalid Code");
       }
     } catch (error: any) {
-        console.log("login failed", error.message);
-        toast.error("Invalid Code");
+      toast.error(error.response.data.error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -55,8 +56,10 @@ export default function Home() {
           <MuiOtpInput value={otp} onChange={handleChange} length={6} autoFocus />
         </div>
         
-        <button onClick={handleVerification} className={style.signin_btn}>
-          <span>Verify OTP</span>
+        <button onClick={handleVerification} className={style.signin_btn} disabled={loading} >
+          <span>
+              {loading ? ("Loading...") : ("Verify OTP")}
+          </span>
         </button>
       </div>
     </div>

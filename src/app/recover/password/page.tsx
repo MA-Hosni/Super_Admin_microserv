@@ -11,7 +11,6 @@ import Link from "next/link";
 
 export default function Home() {
   const [user, setUser] = useState({ email: "" });
-  const [forgotPasswordStatus, setForgotPasswordStatus] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const forgotPassword = async () => {
@@ -21,10 +20,11 @@ export default function Home() {
         setLoading(true);
         const response = await axios.post("/api/users/forgotpasswordemail", user);
         toast.success('Forgot password email sent')
-        setForgotPasswordStatus(true);
         setUser({ email: "" });
       }
     } catch (error: any) {
+      toast.error('Email Not found')
+      setUser({ email: "" });
       console.log("Forgot password - Email failed", error.message);
     }
     finally {
@@ -40,7 +40,7 @@ export default function Home() {
       <div className={style.form_container}>
         <Toaster position='top-center' reverseOrder={false}></Toaster>
         <div className={style.title_container}>
-          <p className={style.title}>{loading ? "Processing" : "Forgot Password"}</p>
+          <p className={style.title}>Forgot Password</p>
           <span className={style.subtitle}>Enter the email associated with your account and we will send you the link to reset your password</span>
         </div>
         <br />
@@ -61,8 +61,8 @@ export default function Home() {
           />
         </div>
         
-        <button onClick={forgotPassword} className={style.signin_btn}>
-          <span>Send reset link</span>
+        <button onClick={forgotPassword} className={style.signin_btn} disabled={loading}>
+          <span>{loading ? ("Loading...") : ("Send reset link")}</span>
         </button>
 
         <Link href={'/login'} className="flex items-center gap-1 mt-5 font-bold hover:underline" ><IoIosArrowBack size={20}/>Back To Login</Link>

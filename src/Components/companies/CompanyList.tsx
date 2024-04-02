@@ -21,7 +21,7 @@ export default function CompaniesList() {
       sortable: false,
       width: 130,
       renderCell: (params) => (
-        <div className="w-24 h-8 bg-transparent rounded-lg border-solid border border-gray-200">
+        <div className="w-12 h-12 bg-transparent rounded-lg border-solid border border-gray-200">
           <img  className="object-fill w-full h-full rounded-lg" 
           src={params.row.logo}
           alt="Profile Picture"

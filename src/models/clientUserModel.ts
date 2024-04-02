@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const ClientUserSchema = new mongoose.Schema({
     firstName: { 
@@ -40,6 +40,10 @@ const ClientUserSchema = new mongoose.Schema({
         ref: 'Company',
     },
     isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    isDeleted: {
         type: Boolean,
         default: false,
     },

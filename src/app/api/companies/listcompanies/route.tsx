@@ -12,6 +12,9 @@ export async function GET(req: NextRequest) {
         // Aggregate the data to get all companies along with the count of associated UserClients
         const companiesWithUserCounts = await Company.aggregate([
             {
+                $match: { isDeleted: false } // Match only non-deleted companies
+            },
+            {
                 $lookup: {
                     from: "userclients", // Collection name of UserClient model
                     localField: "_id", // Field from Company model

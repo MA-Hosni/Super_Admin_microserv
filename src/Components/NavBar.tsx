@@ -5,23 +5,34 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PiBell , PiCaretDownBold } from "react-icons/pi";
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Navbar = () => {
-
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userData, setUserData] = useState({
-    firstName: "",
+    firstName: "Profile",
     lastName: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
-})
+  })
+
 
   useEffect(() => {
     const getUserDetails = async () => {
       try {
         const res = await axios.get('/api/users/profiledata');
         setUserData(res.data.user);
+        dispatch({
+          type: "SET_USER",
+          payload: {
+            firstName: res.data.user.firstName,
+            lastName: res.data.user.lastName,
+            profilePhoto: res.data.user.profilePhoto,
+          }
+        })
       } catch (error: any) {
         console.log(error.message);
       }
@@ -45,12 +56,12 @@ const Navbar = () => {
         <button onClick={() => setIsDropdownOpen((prev) => !prev)} className="flex items-center ml-4 p-2 bg-white rounded-lg border-solid border-2 border-gray-200">
           <div className="w-8 h-8 bg-black rounded-lg border-solid border border-gray-200">
           <img  className="object-fill w-full h-full rounded-lg" 
-          src={userData.profilePhoto}
+          src={user.profilePhoto}
           alt="Profile Picture"
           />
           </div>
           <div className="ml-4">
-            <p className="text-base font-semibold">{userData.firstName} {userData.lastName}</p>
+            <p className="text-base font-semibold">{user.firstName} {user.lastName}</p>
           </div>
           <div className="ml-4 ">
           <PiCaretDownBold />

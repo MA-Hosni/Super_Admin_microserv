@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
-export async function DELETE(req:NextRequest, res:NextResponse ) {
+export async function PATCH(req:NextRequest, res:NextResponse ) {
   const url = req.nextUrl;
   const id = url.searchParams.get('id');
     try {
-      const manager = await User.findOneAndDelete({ _id: id });
+      const manager = await User.findByIdAndUpdate({ _id: id }, { $set: { isDeleted: true } });
       // Return the managers
       return NextResponse.json({
         message: "Manager deleted successfully",

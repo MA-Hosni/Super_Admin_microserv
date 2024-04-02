@@ -7,8 +7,11 @@ import { LiaUserShieldSolid } from "react-icons/lia";
 import { CiMail } from "react-icons/ci";
 import { PiPencilSimpleLineLight } from "react-icons/pi";
 import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
   const [userData, setUserData] = useState({
     firstName: "",
@@ -28,6 +31,13 @@ export default function Home() {
       console.log(res.data.user);
       const formattedDateOfBirth = new Date(res.data.user.dateofBirth).toISOString().slice(0, 10);
       setUserData({ ...res.data.user, dateofBirth: formattedDateOfBirth });
+      dispatch({
+        type: "SET_USER",
+        payload: {
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+        }
+      })
     } catch (error: any) {
       console.log(error.message);
     }
@@ -46,6 +56,13 @@ export default function Home() {
     try {
       const res = await axios.patch('/api/users/profileupdate', userData);
       console.log("manager updated successfully", res.data);
+      dispatch({
+        type: "SET_USER",
+        payload: {
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+        }
+      })
       toast.success("manager updated successfully");
       setEdit(false);
     } catch (error: any) {

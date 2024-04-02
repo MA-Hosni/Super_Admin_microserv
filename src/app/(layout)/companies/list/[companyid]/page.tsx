@@ -116,9 +116,9 @@ export default function Home({ params }:any) {
         <div className="flex items-center justify-around">
             <div className="w-[350px]">
                 <h1 className="text-xl font-bold flex gap-2 mb-2"><GrBrush />Company Logo <p className="text-xs">(optional)</p></h1>
-                <p>Upload your company’s logo here (max. 1MB). We recommend a PNG image with transparent background sized 260×80px.</p>
+                <p>Upload your company’s logo here (max. 1MB). We recommend a PNG image with transparent background sized 200×200px.</p>
             </div>
-            <div className="border-2 overflow-hidden rounded-md w-[260px] h-[80px] cursor-pointer mt-12 ml-12">
+            <div className="border-2 overflow-hidden rounded-lg w-[200px] h-[200px] cursor-pointer mt-12 ml-12">
                 <img src={company.logo} alt="add company logo" className="object-fill w-full h-full"/>
             </div>
         </div>
