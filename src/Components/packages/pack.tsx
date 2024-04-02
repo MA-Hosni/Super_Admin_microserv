@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 
 interface Package {
@@ -21,36 +22,42 @@ interface Package {
 }
 
 export default function Package() {
+  const plan = useSelector((state: any) => state.plan);
   const router = useRouter();
+  const dispatch = useDispatch();
   const [packages, setPackages] = useState<Package[]>([]);
 
   useEffect(() => {
     fetchData();
-}, [packages]);
+  }, [packages]);
+  
+
   const fetchData = async () => {
     try {
         const response = await axios.get("/api/packages/listpacks");
+        const packagesData = response.data.map((pack: Package) => ({
+            id: pack._id,
+            isActive: pack.isActive,
+        }));
         setPackages(response.data);
+        dispatch({
+            type: "SET_PACK",
+            payload: packagesData,
+        });
     } catch (error) {
         console.error('Error fetching packages:', error);
     }
   };
+
   const handleEdit = (packageId: string) => {
     router.push(`/packages/list/${packageId}`);
   }
 
-  const handleDelete = async (packageId: string, action: string) => {
+  const handleDelete = async (packageId: string) => {
     try {
-      if( action === 'ACTIVATE') {
         const response = await axios.patch(`/api/packages/packdelete?id=${packageId}`);
-        await fetchData();
+        fetchData();
         toast.success("Package updated successfully");
-      }
-      // if( action === 'DELETE') {
-      //   const response = await axios.delete(`/api/packages/packdelete?id=${packageId}`);
-      //   await fetchData();
-      //   toast.success("Package deleted successfully");
-      // }
     } catch (error) {
         console.error('Error fetching packages:', error);
     }
@@ -81,17 +88,9 @@ return (
             ))}
           </ul>
           <button onClick={() => handleEdit(pack._id)} className="w-full bg-white text-pink-400 font-semibold rounded-md p-2 mt-4">Edit Pack</button>
-          <button onClick={() => handleDelete(pack._id, 'ACTIVATE')} className="absolute top-3 right-3 rounded-md bg-pink-300 h-9 w-9 flex items-center justify-center">
-          {pack.isActive === false ? (
-              <MdDisabledVisible size={25} />
-            ) : (
-              <MdVisibility size={25} />
-            )}
-            
+          <button onClick={() => handleDelete(pack._id)} className="absolute top-3 right-3 rounded-md bg-pink-300 h-9 w-9 flex items-center justify-center">
+          {plan.packages.find((pkg: any) => pkg.id === pack._id)?.isActive ? <MdVisibility size={25} /> : <MdDisabledVisible size={25} />}
           </button>
-          {/* <button onClick={() => handleDelete(pack._id, 'DELETE')} className="absolute top-3 right-14 rounded-md bg-pink-300 h-9 w-9 flex items-center justify-center">
-              <IoMdTrash size={25} />
-          </button> */}
         </div>
       ))}
     </section>

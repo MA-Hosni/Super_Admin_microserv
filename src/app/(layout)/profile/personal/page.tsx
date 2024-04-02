@@ -36,6 +36,7 @@ export default function Home() {
         payload: {
           firstName: res.data.user.firstName,
           lastName: res.data.user.lastName,
+          profilePhoto: res.data.user.profilePhoto,
         }
       })
     } catch (error: any) {

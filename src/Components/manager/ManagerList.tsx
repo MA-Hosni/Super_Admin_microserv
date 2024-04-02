@@ -86,25 +86,37 @@ export default function ManagerList() {
   }); // Details for DeleteChecker
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/managers/listmanagers");
-        const dataWithId = response.data.map((row:any) => ({
-          ...row,
-          id: row._id
-        }));
-        setRows(dataWithId);
-      } catch (error) {
-        console.error('Error fetching managers:', error);
-      }
-    };
-
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/managers/listmanagers");
+      const dataWithId = response.data.map((row:any) => ({
+        ...row,
+        id: row._id
+      }));
+      setRows(dataWithId);
+    } catch (error) {
+      console.error('Error fetching managers:', error);
+    }
+  };
+
   const handleDelete = (manager:any) => {
     setSelectedManager(manager);
-    setDisplayed(!displayed);
+    setDisplayed(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await axios.patch(`/api/managers/managerdelete?id=${selectedManager._id}`);
+      toast.success('Manager deleted successfully');
+      setDisplayed(false);
+      fetchData(); // Fetch updated data after deletion
+    } catch (error) {
+      toast.error('Error deleting manager');
+      console.error('Error deleting manager:', error);
+    }
   };
 
   return (
@@ -118,6 +130,7 @@ export default function ManagerList() {
         <DeleteChecker
           manager={selectedManager}
           onClose={() => setDisplayed(false)}
+          onDeleteConfirm={handleDeleteConfirm} // Pass callback to handle deletion
         />
       )}
     </Box>

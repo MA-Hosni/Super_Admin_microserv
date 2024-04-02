@@ -87,26 +87,38 @@ export default function CompaniesList() {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/companies/listcompanies");
-        const dataWithId = response.data.map((row:any) => ({
-          ...row,
-          id: row._id
-        }));
-        setRows(dataWithId);
-      } catch (error) {
-        toast.error("Error fetching companies")
-        console.error('Error fetching companies:', error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/companies/listcompanies");
+      const dataWithId = response.data.map((row:any) => ({
+        ...row,
+        id: row._id
+      }));
+      setRows(dataWithId);
+    } catch (error) {
+      toast.error("Error fetching companies")
+      console.error('Error fetching companies:', error);
+    }
+  };
 
   const handleDelete = (company:any) => {
     setSelectedCompany(company);
     setDisplayed(!displayed);
+  };
+
+  const handleDeleteConfirm = async () => {
+      try {
+          const response = await axios.patch(`/api/companies/companydelete?id=${selectedCompany._id}`);
+          toast.success('Company deleted successfully');
+          setDisplayed(false);
+          fetchData(); // Fetch updated data after deletion
+        } catch (error) {
+            toast.error('Error delete manager')
+            console.error('Error delete manager:', error);
+        }
   };
 
   return (
@@ -120,6 +132,7 @@ export default function CompaniesList() {
         <PopUpDelete
           company={selectedCompany}
           onClose={() => setDisplayed(false)}
+          onDeleteConfirm={handleDeleteConfirm} // Pass callback to handle deletion
         />
       )}
     </Box>

@@ -1,28 +1,17 @@
 import style from "@/Components/companies/popUpDelete.module.css"
 import { useState } from "react";
-import axios from 'axios';
-import toast from 'react-hot-toast';
 
-const PopUpDelete = ({ company, onClose }:any) => {
-    const { _id, companyName, email } = company;
+const PopUpDelete = ({ company, onClose, onDeleteConfirm }:any) => {
+    const { companyName, email } = company;
     const [enteredEmail, setEnteredEmail] = useState("");
     const [error, setError] = useState("");
   
     const handleConfirm = async () => {
       if (enteredEmail === email) {
-        try {
-            console.log(_id)
-            const response = await axios.patch(`/api/companies/companydelete?id=${_id}`);
-            toast.success('Company deleted successfully');
-          } catch (error) {
-              toast.error('Error delete manager')
-              console.error('Error delete manager:', error);
-          }
-        onClose();
-        window.location.reload();
-        } else {
-          setError("Email does not match!");
-        }
+        onDeleteConfirm(); // Call the callback to handle deletion
+      } else {
+        setError("Email does not match!");
+      }
     };
   return (
     <div className="absolute top-4 right-1/3 z-20">
