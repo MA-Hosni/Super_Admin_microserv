@@ -13,24 +13,40 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: "Profile",
-    lastName: "",
-    profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
-  })
 
 
   useEffect(() => {
     const getUserDetails = async () => {
       try {
         const res = await axios.get('/api/users/profiledata');
-        setUserData(res.data.user);
         dispatch({
           type: "SET_USER",
           payload: {
             firstName: res.data.user.firstName,
             lastName: res.data.user.lastName,
             profilePhoto: res.data.user.profilePhoto,
+            groupName: res.data.user.permissionGroup.groupName,
+            viewAllManagers: res.data.user.permissionGroup.viewAllManagers,
+            viewManagerDetails: res.data.user.permissionGroup.viewManagerDetails,
+            deleteManager: res.data.user.permissionGroup.deleteManager,
+            addNewManager: res.data.user.permissionGroup.addNewManager,
+            editManagerDetails: res.data.user.permissionGroup.editManagerDetails,
+            viewAllCompanies: res.data.user.permissionGroup.viewAllCompanies,
+            viewCompanyDetails: res.data.user.permissionGroup.viewCompanyDetails,
+            deleteCompany: res.data.user.permissionGroup.deleteCompany,
+            addNewCompany: res.data.user.permissionGroup.addNewCompany,
+            editCompanyDetails: res.data.user.permissionGroup.editCompanyDetails,
+            viewAllPackages: res.data.user.permissionGroup.viewAllPackages,
+            viewPackageDetails: res.data.user.permissionGroup.viewPackageDetails,
+            deletePackage: res.data.user.permissionGroup.deletePackage,
+            addNewPackage: res.data.user.permissionGroup.addNewPackage,
+            editPackageDetails: res.data.user.permissionGroup.editPackageDetails,
+            viewAllPermissions: res.data.user.permissionGroup.viewAllPermissions,
+            viewPermissionDetails: res.data.user.permissionGroup.viewPermissionDetails,
+            deletePermission: res.data.user.permissionGroup.deletePermission,
+            addNewPermission: res.data.user.permissionGroup.addNewPermission,
+            editPermissionDetails: res.data.user.permissionGroup.editPermissionDetails,
+            assignUsers: res.data.user.permissionGroup.assignUsers,
           }
         })
       } catch (error: any) {
@@ -54,7 +70,7 @@ const Navbar = () => {
   return (
     <nav className='sticky top-0 w-full px-16 flex flex-row-reverse items-center h-16 bg-white z-10'>
         <button onClick={() => setIsDropdownOpen((prev) => !prev)} className="flex items-center ml-4 p-2 bg-white rounded-lg border-solid border-2 border-gray-200">
-          <div className="w-8 h-8 bg-black rounded-lg border-solid border border-gray-200">
+          <div className="w-8 h-8 bg-white rounded-lg border-solid border border-gray-200">
           <img  className="object-fill w-full h-full rounded-lg" 
           src={user.profilePhoto}
           alt="Profile Picture"

@@ -13,7 +13,6 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home({ params }:any) {
     const managerId = params.employeeid;
-    console.log(managerId)
     const router = useRouter();
     const [edit, setEdit] = useState(false);
     const [userData, setUserData] = useState({
@@ -26,6 +25,9 @@ export default function Home({ params }:any) {
         dateofBirth: "",
         address: "",
         profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
+        permissionGroup: {
+            groupName: "",
+        },
       })
     const backToList = () => {
       router.push("/managers/list");
@@ -93,8 +95,8 @@ export default function Home({ params }:any) {
                     </div>
                     <div className="flex flex-col gap-2">
                         <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.lastName}</h1>
-                        <p className="flex items-end gap-2 font-medium"><LiaUserShieldSolid size={25} /> Admin</p>
-                        <p className="flex items-end gap-2 font-medium"><CiMail size={25} />{userData.email}</p>
+                        <p className="flex items-baseline gap-2 font-medium"> <LiaUserShieldSolid size={24} />{userData.permissionGroup.groupName} </p>
+                        <p className="flex items-end gap-2 font-medium"><CiMail size={24} />{userData.email}</p>
                     </div>
                 </div>
                 { edit ? null : (            
@@ -168,8 +170,9 @@ export default function Home({ params }:any) {
                     <input
                         type="text"
                         id="role"
+                        value={userData.permissionGroup.groupName}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        {...(edit ? {} : { disabled: true })}
+                        disabled
                     />
                     </div>
                     <div className="mb-3 w-full">

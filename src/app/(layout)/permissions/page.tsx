@@ -9,7 +9,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
   const [displayed, setDisplayed] = useState(false)
-  
+
   const handleCreateGroup = () => {
     setDisplayed(true);
   };

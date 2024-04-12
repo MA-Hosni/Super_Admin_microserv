@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,6 +8,12 @@ import { FiUnlock , FiLock } from "react-icons/fi";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { validateManager } from "@/helpers/validatorManager";
+
+
+interface Group {
+    _id: string;
+    groupName: string;
+}
 
 export default function Home() {
     // Cloud name: djfoa8ffg
@@ -18,6 +24,7 @@ export default function Home() {
     const [file, setFile] = useState(null)
     const [pwdVisible , setPwdVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [groups, setGroups] = useState<Group[]>([]);
     const [user, setUser] = useState({
         firstName: "",
         lastName: "",
@@ -29,7 +36,20 @@ export default function Home() {
         dateofBirth: "",
         address: "",
         profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
+        permissionGroup: "",
     })
+
+    useEffect(() => {
+        async function fetchPacks() {
+            try {
+                const response = await axios.get("/api/permission/listgroup");
+                setGroups(response.data);
+            } catch (error) {
+                console.error("Error fetching packs:", error);
+            }
+        }
+        fetchPacks();
+    }, []);
 
     const onSignup = async () => {
         try {
@@ -41,7 +61,6 @@ export default function Home() {
                     form.append('file', file)
                     form.append("upload_preset", "bsxm6ivt");
                     await axios.post("https://api.cloudinary.com/v1_1/djfoa8ffg/upload", form).then((result) => {user.profilePhoto = result.data.secure_url});
-                    console.log(user.profilePhoto);
                 }
                 const response = await axios.post("/api/users/signup", user);
                 console.log("Sign up success", response.data);
@@ -91,8 +110,6 @@ export default function Home() {
                     value={user.firstName}
                     onChange={(e) => setUser({...user, firstName: e.target.value})}
                     className="bg-gray-50 border border-gray-300 text-gray-900 focus:ring-pink-500 focus:border-pink-500 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
                 <div className="mb-3 w-full">
@@ -105,8 +122,6 @@ export default function Home() {
                     value={user.lastName}
                     onChange={(e) => setUser({...user, lastName: e.target.value})}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
             </section>
@@ -122,8 +137,6 @@ export default function Home() {
                     onChange={(e) => setUser({...user, email: e.target.value})}
                     placeholder="name@gmail.com"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
                 <div className="mb-3 w-full relative">
@@ -136,8 +149,6 @@ export default function Home() {
                         value={user.password}
                         onChange={(e) => setUser({...user, password: e.target.value})}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                        required
-                        autoComplete="false"
                     />
                     <div className="absolute top-11 right-5 cursor-pointer" onClick={() => setPwdVisible(!pwdVisible)} >
                     { pwdVisible ? <FiUnlock /> : <FiLock /> }
@@ -147,13 +158,21 @@ export default function Home() {
             </section>
             <section className="flex gap-12 pb-4">
                 <div className="mb-3 w-full">
-                <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">Role</label>
-                <input
-                    type="text"
-                    id="role"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    disabled
-                />
+                <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">
+                    Role
+                </label>
+                <select 
+                id="role" 
+                value={user.permissionGroup}
+                onChange={(e) => setUser({...user, permissionGroup: e.target.value})}
+                defaultValue=""
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
+                >
+                <option value="" disabled>Choose a Role</option>
+                {groups.map((group) => (
+                    <option key={group._id} value={group._id}>{group.groupName}</option>
+                ))}
+                </select>
                 </div>
                 <div className="mb-3 w-full">
                 <label htmlFor="matricule" className="block mb-2 text-sm font-medium text-gray-900">
@@ -167,8 +186,6 @@ export default function Home() {
                     maxLength={6}
                     placeholder="6 digits"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
             </section>
@@ -183,9 +200,9 @@ export default function Home() {
                     value={user.phoneNumber}
                     onChange={(e) => setUser({...user, phoneNumber: e.target.value})}
                     placeholder="## ### ###"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
+                    maxLength={8}
+                    pattern="\d{8}"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5" 
                 />
                 </div>
                 <div className="mb-3 w-full">
@@ -201,8 +218,6 @@ export default function Home() {
                     pattern="\d{8}"
                     placeholder="8 digits"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
             </section>
@@ -217,7 +232,6 @@ export default function Home() {
                     value={user.dateofBirth}
                     onChange={(e) => setUser({...user, dateofBirth: e.target.value})}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
                 />
                 </div>
                 <div className="mb-3 w-full">
@@ -231,8 +245,6 @@ export default function Home() {
                     onChange={(e) => setUser({...user, address: e.target.value})}
                     placeholder="address, city, country"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg block w-full p-2.5"
-                    required
-                    autoComplete="false"
                 />
                 </div>
             </section>

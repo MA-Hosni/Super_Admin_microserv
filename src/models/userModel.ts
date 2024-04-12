@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    permissionGroup: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'PermissionGroup',
+    },
     otpCode: String,
     otpCodeExpire: Date,
     forgotPasswordToken: String,

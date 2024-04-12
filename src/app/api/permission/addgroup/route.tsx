@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Group created successfully",
         success: true,
         savedGroup
-    });
+        });
 
     } catch (error: any) {
         return NextResponse.json({error: error.message},

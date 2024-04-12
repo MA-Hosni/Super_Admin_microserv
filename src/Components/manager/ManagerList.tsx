@@ -44,11 +44,11 @@ export default function ManagerList() {
       headerName: 'Manager ID',
       width: 120,
     },
-    {
-      field: 'role',
+    { field: 'permissionGroup.groupName',
       headerName: 'Role',
-      type: 'singleSelect',
-      width: 120,
+      sortable: false,
+      width: 140,
+      renderCell: (params) => (<p>{params.row.permissionGroup.groupName}</p>),
     },
     {
       field: 'email',

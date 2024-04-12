@@ -1,5 +1,6 @@
 import {connect} from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
+import GroupPermission from "@/models/permissionModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { sendEmail } from "@/helpers/mailer";
@@ -10,7 +11,7 @@ connect()
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json()
-        const {firstName, lastName, email, password, matricule, phoneNumber, cin, dateofBirth, address, profilePhoto} = reqBody
+        const {firstName, lastName, email, password, matricule, phoneNumber, cin, dateofBirth, address, profilePhoto, permissionGroup} = reqBody
 
         console.log(reqBody);
 
@@ -35,19 +36,28 @@ export async function POST(request: NextRequest) {
             cin,
             dateofBirth,
             address,
-            profilePhoto
+            profilePhoto,
+            permissionGroup
         })
 
-        const saverdUser = await newUser.save()
-        console.log(saverdUser);
+        const savedUser = await newUser.save()
+        console.log(savedUser);
 
+        // Add the newly created user to the chosen permission group
+        const group = await GroupPermission.findById(permissionGroup);
+        if (!group) {
+            return NextResponse.json({error: "Permission group not found"}, {status: 404});
+        }
+ 
+        group.users.push(savedUser._id);
+        await group.save();
 
         // send verification email
-        await sendEmail({email, emailType: "VERIFY", userId: saverdUser._id})
+        await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
         return NextResponse.json({
             message: "User created successfully",
             success: true,
-            saverdUser
+            savedUser
         })
 
     } catch (error: any) {

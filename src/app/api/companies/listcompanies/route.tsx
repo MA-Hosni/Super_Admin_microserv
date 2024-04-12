@@ -1,6 +1,5 @@
 import {connect} from "@/dbConfig/dbConfig";
 import Company from "@/models/companyModel";
-import UserClient from "@/models/clientUserModel";
 import { NextRequest, NextResponse } from "next/server";
 
 

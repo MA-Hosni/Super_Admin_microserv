@@ -24,6 +24,9 @@ export default function Home() {
     lastName: "",
     email: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
+    permissionGroup: {
+      groupName: "",
+    },
     twoFactor: false,
   })
 
@@ -96,8 +99,8 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-2">
             <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.lastName}</h1>
-            <p className="flex items-end gap-2 font-medium"><LiaUserShieldSolid size={25} /> Admin</p>
-            <p className="flex items-end gap-2 font-medium"><CiMail size={25} />{userData.email}</p>
+            <p className="flex items-baseline gap-2 font-medium"> <LiaUserShieldSolid size={24} />{userData.permissionGroup.groupName} </p>
+            <p className="flex items-end gap-2 font-medium"><CiMail size={24} />{userData.email}</p>
         </div>
       </div>
       </div>

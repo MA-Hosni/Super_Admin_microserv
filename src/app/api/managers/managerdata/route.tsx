@@ -8,7 +8,10 @@ export async function GET(req:NextRequest, res:NextResponse ) {
   const url = req.nextUrl;
   const id = url.searchParams.get('id');
     try {
-      const manager = await User.findOne({ _id: id }).select("-password -isVerified -createdAt -updatedAt");
+      const manager = await User.findOne({ _id: id }).select("-password -isVerified -createdAt -updatedAt").populate({
+        path: 'permissionGroup',
+        select: '_id groupName' // Specify fields to select from User model
+      });
       // Return the managers
       return NextResponse.json(manager); 
     } catch (error:any) {

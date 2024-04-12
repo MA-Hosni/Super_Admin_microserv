@@ -23,12 +23,14 @@ export default function Home() {
     dateofBirth: "",
     address: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
+    permissionGroup: {
+      groupName: "",
+  },
   })
 
   const getUserDetails = async () => {
     try {
       const res = await axios.get('/api/users/profiledata');
-      console.log(res.data.user);
       const formattedDateOfBirth = new Date(res.data.user.dateofBirth).toISOString().slice(0, 10);
       setUserData({ ...res.data.user, dateofBirth: formattedDateOfBirth });
       dispatch({
@@ -37,8 +39,31 @@ export default function Home() {
           firstName: res.data.user.firstName,
           lastName: res.data.user.lastName,
           profilePhoto: res.data.user.profilePhoto,
+          groupName: res.data.user.permissionGroup.groupName,
+          viewAllManagers: res.data.user.permissionGroup.viewAllManagers,
+          viewManagerDetails: res.data.user.permissionGroup.viewManagerDetails,
+          deleteManager: res.data.user.permissionGroup.deleteManager,
+          addNewManager: res.data.user.permissionGroup.addNewManager,
+          editManagerDetails: res.data.user.permissionGroup.editManagerDetails,
+          viewAllCompanies: res.data.user.permissionGroup.viewAllCompanies,
+          viewCompanyDetails: res.data.user.permissionGroup.viewCompanyDetails,
+          deleteCompany: res.data.user.permissionGroup.deleteCompany,
+          addNewCompany: res.data.user.permissionGroup.addNewCompany,
+          editCompanyDetails: res.data.user.permissionGroup.editCompanyDetails,
+          viewAllPackages: res.data.user.permissionGroup.viewAllPackages,
+          viewPackageDetails: res.data.user.permissionGroup.viewPackageDetails,
+          deletePackage: res.data.user.permissionGroup.deletePackage,
+          addNewPackage: res.data.user.permissionGroup.addNewPackage,
+          editPackageDetails: res.data.user.permissionGroup.editPackageDetails,
+          viewAllPermissions: res.data.user.permissionGroup.viewAllPermissions,
+          viewPermissionDetails: res.data.user.permissionGroup.viewPermissionDetails,
+          deletePermission: res.data.user.permissionGroup.deletePermission,
+          addNewPermission: res.data.user.permissionGroup.addNewPermission,
+          editPermissionDetails: res.data.user.permissionGroup.editPermissionDetails,
+          assignUsers: res.data.user.permissionGroup.assignUsers,
         }
       })
+      console.log("user dispach normal", user)
     } catch (error: any) {
       console.log(error.message);
     }
@@ -56,12 +81,12 @@ export default function Home() {
   const updateUserData = async () => {
     try {
       const res = await axios.patch('/api/users/profileupdate', userData);
-      console.log("manager updated successfully", res.data);
       dispatch({
         type: "SET_USER",
         payload: {
           firstName: res.data.user.firstName,
           lastName: res.data.user.lastName,
+          profilePhoto: res.data.user.profilePhoto,
         }
       })
       toast.success("manager updated successfully");
@@ -86,8 +111,8 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-2">
                 <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.lastName}</h1>
-                <p className="flex items-end gap-2 font-medium"><LiaUserShieldSolid size={25} /> Admin</p>
-                <p className="flex items-end gap-2 font-medium"><CiMail size={25} />{userData.email}</p>
+                <p className="flex items-baseline gap-2 font-medium"> <LiaUserShieldSolid size={24} />{userData.permissionGroup.groupName} </p>
+                <p className="flex items-end gap-2 font-medium"><CiMail size={24} />{userData.email}</p>
             </div>
           </div>
           { edit ? null : (            
@@ -167,6 +192,7 @@ export default function Home() {
                 <input
                   type="text"
                   id="role"
+                  value={userData.permissionGroup.groupName}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   disabled
                 />
