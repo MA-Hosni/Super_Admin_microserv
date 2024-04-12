@@ -12,6 +12,7 @@ import axios from "axios";
 import { AddUserToGroup } from "@/Components/permissions/addUserGroup";
 import toast, { Toaster } from "react-hot-toast";
 import { SwipeGroup } from "@/Components/permissions/swipeUser";
+import { useSelector } from "react-redux";
 
 export default function Home({ params }:any) {
     const columns: GridColDef[] = [
@@ -56,6 +57,7 @@ export default function Home({ params }:any) {
       ];
     const groupId = params.groupId;
     const router = useRouter();
+    const user = useSelector((state: any) => state.user);
     const pathname = usePathname();
     const [display, setDisplay] = useState(false);
     const [displayed, setDisplayed] = useState(false);
@@ -93,12 +95,20 @@ export default function Home({ params }:any) {
     };
 
     const handleAddUsers = () => {
-        setDisplay(true);
+        if(user.assignUsers){
+            setDisplay(true);
+        } else {
+            toast.error("You are not authorized")
+        }
       };
 
     const handleSwipeGroup = (employee:any) => {
-        setSelectedEmployee(employee);
-        setDisplayed(!displayed);
+        if(user.assignUsers){
+            setSelectedEmployee(employee);
+            setDisplayed(!displayed);
+        } else {
+            toast.error("You are not authorized")
+        }
     };
 
     const handleSwipeConfirm = async () => {

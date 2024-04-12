@@ -8,10 +8,11 @@ import axios from 'axios';
 import Link from 'next/link';
 import DeleteChecker from '@/Components/manager/deleteChecker';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { useSelector } from "react-redux";
 
 
 export default function ManagerList() {
+  const user = useSelector((state: any) => state.user);
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'ID', width: 150 },
     {
@@ -68,10 +69,14 @@ export default function ManagerList() {
       width: 75,
       renderCell: (params) => (
         <>
+        {user.viewManagerDetails ? (
           <Link href={`/managers/list/${params.row._id}`}><PiEyeBold size={20} style={{ cursor: 'pointer', marginRight: 8 }} /></Link>
+        ) : null}
+        {user.deleteManager ? (
           <button onClick={() => handleDelete(params.row)}>
             <PiTrashSimpleBold size={20} style={{ cursor: 'pointer', color: 'red' }} />
           </button>
+        ) : null}
         </>
       ),
     },

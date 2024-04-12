@@ -8,10 +8,11 @@ import axios from 'axios';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import PopUpDelete from '@/Components/companies/popUpDelete';
-
+import { useSelector } from "react-redux";
 
 
 export default function CompaniesList() {
+  const user = useSelector((state: any) => state.user);
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'ID', width: 120 },
     {
@@ -67,10 +68,14 @@ export default function CompaniesList() {
       width: 120,
       renderCell: (params) => (
         <>
+        {user.viewCompanyDetails ? (
           <Link href={`/companies/list/${params.row._id}`}><PiEyeBold size={20} style={{ cursor: 'pointer', marginRight: 8 }} /></Link>
+        ) : null}
+        {user.deleteCompany ? (
           <button onClick={() => handleDelete(params.row)}>
             <PiTrashSimpleBold size={20} style={{ cursor: 'pointer', color: 'red' }} />
           </button>
+        ) : null}
         </>
       ),
     },

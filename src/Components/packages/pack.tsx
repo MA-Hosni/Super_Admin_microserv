@@ -22,6 +22,7 @@ interface Package {
 }
 
 export default function Package() {
+  const user = useSelector((state: any) => state.user);
   const plan = useSelector((state: any) => state.plan);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,7 +51,11 @@ export default function Package() {
   };
 
   const handleEdit = (packageId: string) => {
-    router.push(`/packages/list/${packageId}`);
+    if(user.viewPackageDetails) {
+      router.push(`/packages/list/${packageId}`);
+    } else {
+      toast.error("You are not authorized")
+    }
   }
 
   const handleDelete = async (packageId: string) => {
@@ -87,10 +92,12 @@ return (
               </li>
             ))}
           </ul>
-          <button onClick={() => handleEdit(pack._id)} className="w-full bg-white text-pink-400 font-semibold rounded-md p-2 mt-4">Edit Pack</button>
-          <button onClick={() => handleDelete(pack._id)} className="absolute top-3 right-3 rounded-md bg-pink-300 h-9 w-9 flex items-center justify-center">
-          {plan.packages.find((pkg: any) => pkg.id === pack._id)?.isActive ? <MdVisibility size={25} /> : <MdDisabledVisible size={25} />}
-          </button>
+          <button onClick={() => handleEdit(pack._id)} className="w-full bg-white text-pink-400 font-semibold rounded-md p-2 mt-4">View Details</button>
+          {user.deletePackage ? (
+            <button onClick={() => handleDelete(pack._id)} className="absolute top-3 right-3 rounded-md bg-pink-300 h-9 w-9 flex items-center justify-center">
+              {plan.packages.find((pkg: any) => pkg.id === pack._id)?.isActive ? <MdVisibility size={25} /> : <MdDisabledVisible size={25} />}
+            </button>
+          ) : null}
         </div>
       ))}
     </section>

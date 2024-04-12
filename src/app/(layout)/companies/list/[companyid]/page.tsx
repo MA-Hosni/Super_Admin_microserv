@@ -7,7 +7,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { PiPencilSimpleLineLight } from "react-icons/pi";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from "axios";
-
+import { useSelector } from "react-redux";
 
 
 interface Pack {
@@ -16,6 +16,7 @@ interface Pack {
 }
 
 export default function Home({ params }:any) {
+    const user = useSelector((state: any) => state.user);
     const companyId = params.companyid;
     const router = useRouter();
     const [edit, setEdit] = useState(false);
@@ -62,15 +63,18 @@ export default function Home({ params }:any) {
     }, []);
 
     useEffect(() => {
-
-            getUserData();
+        getUserData();
     }, [companyId]);
 
     const backToList = () => {
         router.push("/companies/list");
     }
     const editCompanyData = () => {
-        setEdit(!edit)
+        if(user.editPackageDetails){
+            setEdit(!edit)
+        } else {
+            toast.error("You are not authorized")
+        }
     } 
 
     const onUpdate = async () => {

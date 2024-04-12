@@ -7,10 +7,11 @@ import { PiPencilSimpleLineLight } from "react-icons/pi";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { validatePack } from "@/helpers/pricePlans/packValidator";
+import { useSelector } from "react-redux";
 
 export default function Home({ params }:any) {
+    const user = useSelector((state: any) => state.user);
     const packageId = params.packageid;
-    console.log(packageId)
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [textareas, setTextareas] = useState<string[]>([]);
@@ -57,7 +58,11 @@ export default function Home({ params }:any) {
     };
 
     const editPackageData = () => {
-        setEdit(!edit);
+        if(user.editManagerDetails){
+            setEdit(!edit)
+        } else {
+            toast.error("You are not authorized")
+        }
     };
 
     const onCancel = () => {

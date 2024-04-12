@@ -10,8 +10,10 @@ import { CiMail } from "react-icons/ci";
 import { PiPencilSimpleLineLight } from "react-icons/pi";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import toast, { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 export default function Home({ params }:any) {
+    const user = useSelector((state: any) => state.user);
     const managerId = params.employeeid;
     const router = useRouter();
     const [edit, setEdit] = useState(false);
@@ -34,7 +36,11 @@ export default function Home({ params }:any) {
     }
 
     const editManagerData = () => {
-        setEdit(!edit)
+        if(user.editManagerDetails){
+            setEdit(!edit)
+        } else {
+            toast.error("You are not authorized")
+        }
     }
 
     useEffect(() => {

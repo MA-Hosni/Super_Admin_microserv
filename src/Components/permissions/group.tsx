@@ -7,7 +7,9 @@ import { UpdateGroupName } from "./Rename";
 import Link from "next/link";
 import axios from "axios";
 import { DeleteGroup } from "./Delete";
-
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { Button } from "@mui/material";
 
 
 
@@ -19,10 +21,11 @@ interface Group {
   }
 
 const Group = () => {
-    const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
-    const [displayedDelete, setDisplayedDelete] = useState<string | null>(null);
-    const [displayedGroup, setDisplayedGroup] = useState<string | null>(null);
-    const [groups, setGroups] = useState<Group[]>([]);
+  const user = useSelector((state: any) => state.user);
+  const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
+  const [displayedDelete, setDisplayedDelete] = useState<string | null>(null);
+  const [displayedGroup, setDisplayedGroup] = useState<string | null>(null);
+  const [groups, setGroups] = useState<Group[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -47,13 +50,21 @@ const Group = () => {
       };
     
       const handleUpdateName = (groupId: string) => {
-        setDisplayedGroup(groupId);
-        toggleDropdown(groupId);
+        if(user.editPermissionDetails) {
+          setDisplayedGroup(groupId);
+          toggleDropdown(groupId);
+        } else {
+          toast.error("You are not authorized")
+        }
       };
 
       const handleDelete = (groupId: string) => {
-        setDisplayedDelete(groupId);
-        toggleDropdown(groupId);
+        if(user.deletePermission) {
+          setDisplayedDelete(groupId);
+          toggleDropdown(groupId);
+        } else {
+          toast.error("You are not authorized")
+        }
       };
 
   return (
@@ -92,7 +103,11 @@ const Group = () => {
                     <div className="flex flex-col items-center gap-4 mt-20">
                         <h1 className="font-semibold text-xl">{group.groupName}</h1>
                         <p className="text-slate-300 text-sm">{group.users} user assigned</p>
-                        <Link href={`/permissions/${group._id}`} className="mt-7 m-4 rounded-lg bg-pink-500 text-white font-semibold text-sm py-2 px-5">See Group</Link>
+                        { user.viewPermissionDetails ? (
+                          <Link href={`/permissions/${group._id}`} className="mt-7 m-4 rounded-lg bg-pink-500 text-white font-semibold text-sm py-2 px-5">See Group</Link>
+                        ) : (
+                          <button className="mt-7 m-4 border-2 border-pink-500 rounded-lg cursor-not-allowed bg-white text-pink-500 font-semibold text-sm py-2 px-5" disabled>Not authorized</button>
+                        )}
                     </div>
                 </section>
             ))}
