@@ -24,9 +24,7 @@ export default function Home() {
     lastName: "",
     email: "",
     profilePhoto: "https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg",
-    permissionGroup: {
-      groupName: "",
-    },
+    groupName: "",
     twoFactor: false,
   })
 
@@ -35,7 +33,7 @@ export default function Home() {
     const getUserDetails = async () => {
       try {
         const res = await axios.get('/api/users/profiledata');
-        setUserData({...res.data.user, dateofBirth: new Date(res.data.user.dateofBirth)});
+        setUserData({...res.data.user, dateofBirth: new Date(res.data.user.dateofBirth), groupName: res.data.group.groupName});
       } catch (error: any) {
         console.log(error.message);
       }
@@ -99,7 +97,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-2">
             <h1 className="font-bold text-2xl pb-8 pt-2">{userData.firstName} {userData.lastName}</h1>
-            <p className="flex items-baseline gap-2 font-medium"> <LiaUserShieldSolid size={24} />{userData.permissionGroup.groupName} </p>
+            <p className="flex items-baseline gap-2 font-medium"> <LiaUserShieldSolid size={24} />{userData.groupName} </p>
             <p className="flex items-end gap-2 font-medium"><CiMail size={24} />{userData.email}</p>
         </div>
       </div>
