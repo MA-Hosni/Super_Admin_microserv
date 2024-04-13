@@ -11,11 +11,9 @@ connect();
 export async function GET(request:NextRequest) {
     try {
         const userId = await getDataFromToken(request);
-        const user = await User.findOne({_id: userId}).select("-password -isVerified -createdAt -updatedAt").populate({
-            path: 'group',
-            select: '-users -createdAt -updatedAt' // Specify fields to select from User model
-          });
-        return NextResponse.json({message: "User found", user})
+        const user = await User.findOne({_id: userId}).select("-password -isVerified -createdAt -updatedAt");
+        const group = await GroupPermission.findById(user.permissionGroup).select("-users -createdAt -updatedAt");
+        return NextResponse.json({message: "User found", user, group})
     } catch (error: any) {
         return NextResponse.json({error: error.message}, {status: 400});
     }

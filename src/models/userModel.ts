@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    group: {
+    permissionGroup: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'PermissionGroup',
     },
