@@ -86,14 +86,14 @@ const Navbar = () => {
           <div className="absolute top-full right-12 bg-white shadow-md rounded-lg mt-1">
             {/* Dropdown content goes here */}
             <ul className="pt-2 w-48">
-              <li className='p-1'><Link href="/profile/personal" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-blue-100">My Profile</Link></li>
-              <li className='p-1'><Link href="/profile/security" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-blue-100">Security</Link></li>
-              <li className='p-1'><button onClick={logout} className="rounded block px-4 py-2 text-gray-800 hover:bg-blue-100 w-full">Sign out</button></li>
+              <li className='p-1'><Link href="/profile/personal" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-pink-100">My Profile</Link></li>
+              <li className='p-1'><Link href="/profile/security" className="rounded border-b block px-4 py-2 text-gray-800 hover:bg-pink-100">Security</Link></li>
+              <li className='p-1'><button onClick={logout} className="rounded block px-4 py-2 text-gray-800 hover:bg-pink-100 w-full">Sign out</button></li>
             </ul>
           </div>
         )}
         </button>
-        <Link href={"/"} className='grid place-items-center bg-blue-100 rounded-md h-10 w-10'>
+        <Link href={"/notifications"} className='grid place-items-center bg-pink-100 rounded-md h-10 w-10'>
             <button>
                 <PiBell size={23} />
             </button>
