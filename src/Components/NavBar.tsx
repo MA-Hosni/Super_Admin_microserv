@@ -93,11 +93,11 @@ const Navbar = () => {
           </div>
         )}
         </button>
-        <Link href={"/notifications"} className='grid place-items-center bg-pink-100 rounded-md h-10 w-10'>
+        {/* <Link href={"/notifications"} className='grid place-items-center bg-pink-100 rounded-md h-10 w-10'>
             <button>
                 <PiBell size={23} />
             </button>
-        </Link>
+        </Link> */}
     </nav>
   )
 }

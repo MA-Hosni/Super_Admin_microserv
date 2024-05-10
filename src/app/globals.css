@@ -57,3 +57,71 @@ body {
   background: rgb(204, 78, 172); 
   border-radius: 10px;
 }
+
+
+
+.tit {
+padding: 0 15px;
+padding-bottom: 25px;
+display: flex;
+align-items: center;
+}
+.firlin {
+  display: flex;
+  gap: 15px;
+}
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(2, 220px);
+  gap: 10px;
+}
+.chiffres .carre {
+  background-color: var(--body-clr);
+  height: 170px;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  border-radius: 3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.carre .star, .starrr {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+}
+.carre .starr {
+  font-size: 25px;
+}
+.carre .starrr {
+  font-weight: 500;
+  font-size: 12px;
+}
+.graph {
+  width: 100%;
+  background-color: var(--body-clr);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+.char-title {
+  padding: 20px 0 0 50px;
+  font-size: 1rem;
+}
+.thirlin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 15px 0;
+}
+.reclamation, .conge, .clothing-brands, .employees {
+  background-color: var(--body-clr);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+.seclin {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 15px;
+  margin: 15px 0;
+}
+.employees h5 {
+  text-align: center;
+}
